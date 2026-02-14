@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+
 import 'package:echo_see_companion/data/models/transcript_model.dart';
 import 'package:echo_see_companion/data/repositories/transcript_repository.dart';
 import 'package:echo_see_companion/data/repositories/translation_repository.dart';

@@ -1,4 +1,5 @@
 // lib/data/repositories/supabase_user_repository.dart
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:echo_see_companion/data/models/user_model.dart';
 
