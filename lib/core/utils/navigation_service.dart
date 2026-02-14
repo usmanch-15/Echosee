@@ -61,21 +61,21 @@ class NavigationService {
     // Define your routes here
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(builder: (_) => SplashScreen());
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
       case '/login':
-        return FadeSlideRoute(builder: (_) => LoginScreen());
+        return FadeSlideRoute(builder: (_) => const LoginScreen());
       case '/signup':
-        return FadeSlideRoute(builder: (_) => SignupScreen());
+        return FadeSlideRoute(builder: (_) => const SignupScreen());
       case '/home':
-        return MaterialPageRoute(builder: (_) => MainScreen());
+        return MaterialPageRoute(builder: (_) => const MainScreen());
       case '/transcripts':
-        return ScaleRoute(builder: (_) => TranscriptListScreen());
+        return ScaleRoute(builder: (_) => const TranscriptListScreen());
       case '/settings':
-        return MaterialPageRoute(builder: (_) => SettingsScreen());
+        return MaterialPageRoute(builder: (_) => const SettingsScreen());
       case '/profile':
-        return MaterialPageRoute(builder: (_) => ProfileScreen());
+        return MaterialPageRoute(builder: (_) => const ProfileScreen());
       case '/premium':
-        return MaterialPageRoute(builder: (_) => PremiumFeaturesScreen());
+        return MaterialPageRoute(builder: (_) => const PremiumFeaturesScreen());
       case '/reset-password':
         return MaterialPageRoute(builder: (_) => const ResetPasswordScreen());
       
@@ -152,7 +152,7 @@ class FadeSlideRoute extends PageRouteBuilder {
         ),
       );
     },
-    transitionDuration: Duration(milliseconds: 400),
+    transitionDuration: const Duration(milliseconds: 400),
   );
 }
 
@@ -176,7 +176,7 @@ class ScaleRoute extends PageRouteBuilder {
         ),
       );
     },
-    transitionDuration: Duration(milliseconds: 500),
+    transitionDuration: const Duration(milliseconds: 500),
   );
 }
 

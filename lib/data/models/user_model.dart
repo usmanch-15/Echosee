@@ -141,7 +141,7 @@ class UsageStats {
     }
     final hours = totalMinutes ~/ 60;
     final minutes = totalMinutes % 60;
-    return '$hours hours ${minutes} minutes';
+    return '$hours hours $minutes minutes';
   }
 
   double get averageDailyMinutes {

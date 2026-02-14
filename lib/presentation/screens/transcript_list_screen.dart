@@ -6,6 +6,8 @@ import 'package:echo_see_companion/data/models/transcript_model.dart';
 import 'transcript_detail_screen.dart';
 
 class TranscriptListScreen extends StatefulWidget {
+  const TranscriptListScreen({super.key});
+
   @override
   _TranscriptListScreenState createState() => _TranscriptListScreenState();
 }
@@ -16,22 +18,22 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
       id: '1',
       title: 'Team Meeting Discussion',
       content: 'We discussed the new project requirements and assigned tasks to team members.',
-      date: DateTime.now().subtract(Duration(hours: 2)),
-      duration: Duration(minutes: 25, seconds: 42),
+      date: DateTime.now().subtract(const Duration(hours: 2)),
+      duration: const Duration(minutes: 25, seconds: 42),
       language: 'English',
       hasTranslation: true,
       speakerSegments: [
         SpeakerSegment(
           speakerId: 0,
           text: 'Hello team, welcome to today\'s meeting.',
-          startTime: Duration(seconds: 0),
-          endTime: Duration(seconds: 5),
+          startTime: const Duration(seconds: 0),
+          endTime: const Duration(seconds: 5),
         ),
         SpeakerSegment(
           speakerId: 1,
           text: 'Let\'s start with the project updates.',
-          startTime: Duration(seconds: 6),
-          endTime: Duration(seconds: 12),
+          startTime: const Duration(seconds: 6),
+          endTime: const Duration(seconds: 12),
         ),
       ],
       isStarred: true,
@@ -40,8 +42,8 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
       id: '2',
       title: 'Client Presentation',
       content: 'Presented the quarterly results to our major client.',
-      date: DateTime.now().subtract(Duration(days: 1)),
-      duration: Duration(minutes: 45, seconds: 18),
+      date: DateTime.now().subtract(const Duration(days: 1)),
+      duration: const Duration(minutes: 45, seconds: 18),
       language: 'Urdu',
       hasTranslation: false,
       speakerSegments: [],
@@ -51,8 +53,8 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
       id: '3',
       title: 'Interview with Candidate',
       content: 'Technical interview for senior developer position.',
-      date: DateTime.now().subtract(Duration(days: 2)),
-      duration: Duration(minutes: 60, seconds: 32),
+      date: DateTime.now().subtract(const Duration(days: 2)),
+      duration: const Duration(minutes: 60, seconds: 32),
       language: 'English',
       hasTranslation: true,
       speakerSegments: [],
@@ -62,8 +64,8 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
       id: '4',
       title: 'Lecture on AI Ethics',
       content: 'University lecture discussing ethical implications of artificial intelligence.',
-      date: DateTime.now().subtract(Duration(days: 3)),
-      duration: Duration(minutes: 90, seconds: 15),
+      date: DateTime.now().subtract(const Duration(days: 3)),
+      duration: const Duration(minutes: 90, seconds: 15),
       language: 'English',
       hasTranslation: false,
       speakerSegments: [],
@@ -73,8 +75,8 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
       id: '5',
       title: 'Podcast Recording',
       content: 'Recorded episode 42 of our tech podcast.',
-      date: DateTime.now().subtract(Duration(days: 5)),
-      duration: Duration(minutes: 55, seconds: 27),
+      date: DateTime.now().subtract(const Duration(days: 5)),
+      duration: const Duration(minutes: 55, seconds: 27),
       language: 'English',
       hasTranslation: true,
       speakerSegments: [],
@@ -88,15 +90,15 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Transcript History'),
+        title: const Text('Transcript History'),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: _showSearchDialog,
           ),
           IconButton(
-            icon: Icon(Icons.filter_list),
+            icon: const Icon(Icons.filter_list),
             onPressed: _showFilterOptions,
           ),
         ],
@@ -119,15 +121,15 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
         onPressed: () {
           // Create new transcript
         },
-        child: Icon(Icons.add),
         backgroundColor: AppColors.primary,
+        child: const Icon(Icons.add),
       ),
     );
   }
 
   Widget _buildStorageInfo() {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.primary.withOpacity(0.1),
         border: Border(
@@ -136,30 +138,30 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
       ),
       child: Row(
         children: [
-          Icon(
+          const Icon(
             Icons.storage,
             color: AppColors.primary,
             size: 24,
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Storage Status',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 LinearProgressIndicator(
                   value: 0.65,
                   backgroundColor: Colors.grey[300],
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   '5 of 10 conversations stored',
                   style: TextStyle(
@@ -184,13 +186,13 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
     ];
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: filters.map((filter) {
             return Padding(
-              padding: EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.only(right: 8),
               child: FilterChip(
                 label: Text(filter['label']!),
                 selected: _selectedFilter == filter['value'],
@@ -239,7 +241,7 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
               size: 64,
               color: Colors.grey[400],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               'No transcripts found',
               style: TextStyle(
@@ -247,7 +249,7 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
                 color: Colors.grey[600],
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               'Start recording to create your first transcript',
               style: TextStyle(
@@ -261,7 +263,7 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
     }
 
     return ListView.builder(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       itemCount: filteredTranscripts.length,
       itemBuilder: (context, index) {
         return _buildTranscriptCard(filteredTranscripts[index]);
@@ -271,8 +273,8 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
 
   Widget _buildTranscriptCard(Transcript transcript) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      margin: EdgeInsets.only(bottom: 12),
+      duration: const Duration(milliseconds: 300),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(AppBorderRadius.lg),
@@ -280,7 +282,7 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 8,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -292,7 +294,7 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
           },
           borderRadius: BorderRadius.circular(AppBorderRadius.lg),
           child: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -304,14 +306,14 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
                     color: AppColors.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(AppBorderRadius.md),
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.transcribe,
                     color: AppColors.primary,
                     size: 24,
                   ),
                 ),
 
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
 
                 // Transcript Details
                 Expanded(
@@ -324,7 +326,7 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
                           Expanded(
                             child: Text(
                               transcript.title,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 16,
                               ),
@@ -353,7 +355,7 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
                         ],
                       ),
 
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
 
                       // Preview Text
                       Text(
@@ -366,7 +368,7 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
                         overflow: TextOverflow.ellipsis,
                       ),
 
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
 
                       // Metadata Row
                       Row(
@@ -379,7 +381,7 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
                                 size: 14,
                                 color: Colors.grey[600],
                               ),
-                              SizedBox(width: 4),
+                              const SizedBox(width: 4),
                               Text(
                                 transcript.formattedDate,
                                 style: TextStyle(
@@ -390,7 +392,7 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
                             ],
                           ),
 
-                          SizedBox(width: 16),
+                          const SizedBox(width: 16),
 
                           // Duration
                           Row(
@@ -400,7 +402,7 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
                                 size: 14,
                                 color: Colors.grey[600],
                               ),
-                              SizedBox(width: 4),
+                              const SizedBox(width: 4),
                               Text(
                                 transcript.formattedDuration,
                                 style: TextStyle(
@@ -411,18 +413,18 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
                             ],
                           ),
 
-                          SizedBox(width: 16),
+                          const SizedBox(width: 16),
 
                           // Language
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                             decoration: BoxDecoration(
                               color: AppColors.primary.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
                               transcript.language.substring(0, 2).toUpperCase(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 11,
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.w600,
@@ -431,8 +433,8 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
                           ),
 
                           if (transcript.hasTranslation) ...[
-                            SizedBox(width: 8),
-                            Icon(
+                            const SizedBox(width: 8),
+                            const Icon(
                               Icons.translate,
                               size: 14,
                               color: Colors.green,
@@ -469,42 +471,42 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
             borderRadius: BorderRadius.circular(AppBorderRadius.lg),
           ),
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
+                const Text(
                   'Search Transcripts',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   decoration: InputDecoration(
                     hintText: 'Enter keywords...',
-                    prefixIcon: Icon(Icons.search),
+                    prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(AppBorderRadius.md),
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: Text('Cancel'),
+                      child: const Text('Cancel'),
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     ElevatedButton(
                       onPressed: () {
                         // Perform search
                         Navigator.pop(context);
                       },
-                      child: Text('Search'),
+                      child: const Text('Search'),
                     ),
                   ],
                 ),
@@ -519,7 +521,7 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
   void _showFilterOptions() {
     showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -527,23 +529,23 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
       ),
       builder: (context) {
         return Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              const Text(
                 'Filter Options',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Sort Options
               ListTile(
-                leading: Icon(Icons.sort_by_alpha),
-                title: Text('Sort by Name'),
+                leading: const Icon(Icons.sort_by_alpha),
+                title: const Text('Sort by Name'),
                 trailing: Radio(
                   value: 'name',
                   groupValue: 'name',
@@ -552,8 +554,8 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
               ),
 
               ListTile(
-                leading: Icon(Icons.date_range),
-                title: Text('Sort by Date'),
+                leading: const Icon(Icons.date_range),
+                title: const Text('Sort by Date'),
                 trailing: Radio(
                   value: 'date',
                   groupValue: 'date',
@@ -562,8 +564,8 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
               ),
 
               ListTile(
-                leading: Icon(Icons.timer),
-                title: Text('Sort by Duration'),
+                leading: const Icon(Icons.timer),
+                title: const Text('Sort by Duration'),
                 trailing: Radio(
                   value: 'duration',
                   groupValue: 'duration',
@@ -571,14 +573,14 @@ class _TranscriptListScreenState extends State<TranscriptListScreen> {
                 ),
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Apply Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text('Apply Filters'),
+                  child: const Text('Apply Filters'),
                 ),
               ),
             ],

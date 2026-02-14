@@ -1,5 +1,4 @@
 // lib/presentation/screens/login_screen.dart
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +8,8 @@ import 'package:echo_see_companion/presentation/screens/main_screen.dart';
 import 'package:echo_see_companion/providers/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -20,7 +21,6 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
 
-  bool _isLoading = false;
   bool _isPasswordVisible = false;
 
   @override
@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     _passwordController.text = '123456';
 
     _controller = AnimationController(
-      duration: Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
 
@@ -56,11 +56,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             constraints: BoxConstraints(
               minHeight: MediaQuery.of(context).size.height,
             ),
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
 
                 // Logo
                 FadeTransition(
@@ -76,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         width: 2,
                       ),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.hearing,
                       size: 50,
                       color: AppColors.primary,
@@ -84,14 +84,14 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   ),
                 ),
 
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
 
                 // Welcome text
                 FadeTransition(
                   opacity: _fadeAnimation,
                   child: Column(
                     children: [
-                      Text(
+                      const Text(
                         'Welcome Back',
                         style: TextStyle(
                           fontSize: 32,
@@ -99,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           color: Colors.black87,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         'Sign in to your account',
                         style: TextStyle(
@@ -111,11 +111,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   ),
                 ),
 
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
 
                 // Login Form
                 Container(
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
@@ -138,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         keyboardType: TextInputType.emailAddress,
                       ),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
                       // Password field
                       _buildTextField(
@@ -155,14 +155,14 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         },
                       ),
 
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
 
                       // Forgot password
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: _showForgotPasswordDialog,
-                          child: Text(
+                          child: const Text(
                             'Forgot Password?',
                             style: TextStyle(
                               color: AppColors.primary,
@@ -172,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         ),
                       ),
 
-                      SizedBox(height: 25),
+                      const SizedBox(height: 25),
 
                       // Login button
                       SizedBox(
@@ -191,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                 elevation: 3,
                               ),
                               child: auth.isLoading
-                                  ? SizedBox(
+                                  ? const SizedBox(
                                 width: 24,
                                 height: 24,
                                 child: CircularProgressIndicator(
@@ -199,7 +199,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                                 ),
                               )
-                                  : Text(
+                                  : const Text(
                                 'LOGIN',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -211,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         ),
                       ),
 
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
 
                       // Divider
                       Row(
@@ -222,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
                             child: Text(
                               'or continue with',
                               style: TextStyle(
@@ -239,7 +239,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         ],
                       ),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
                       // Social buttons
                       Row(
@@ -256,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                               }
                             },
                           ),
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                           _buildSocialButton(
                             icon: Icons.facebook,
                             label: 'Facebook',
@@ -271,7 +271,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         ],
                       ),
 
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
 
                       // Sign up link
                       Row(
@@ -287,10 +287,10 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => SignupScreen()),
+                                MaterialPageRoute(builder: (context) => const SignupScreen()),
                               );
                             },
-                            child: Text(
+                            child: const Text(
                               'Sign Up',
                               style: TextStyle(
                                 color: AppColors.primary,
@@ -304,11 +304,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   ),
                 ),
 
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
 
                 // Test credentials hint
                 Container(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.grey[50],
                     borderRadius: BorderRadius.circular(10),
@@ -326,7 +326,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   ),
                 ),
 
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
               ],
             ),
           ),
@@ -356,7 +356,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             color: Colors.grey[700],
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
@@ -368,7 +368,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           child: Row(
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 15),
+                padding: const EdgeInsets.only(left: 15),
                 child: Icon(
                   icon,
                   color: Colors.grey[600],
@@ -379,7 +379,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   controller: controller,
                   obscureText: isPassword && !isPasswordVisible,
                   keyboardType: keyboardType,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
                   ),
@@ -389,7 +389,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                       color: Colors.grey[500],
                     ),
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 16),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 16),
                   ),
                 ),
               ),
@@ -420,7 +420,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       style: OutlinedButton.styleFrom(
         foregroundColor: Colors.grey[700],
         side: BorderSide(color: Colors.grey[300]!),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -431,7 +431,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   void _login() async {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Please fill all fields'),
           backgroundColor: Colors.red,
         ),
@@ -449,7 +449,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     if (success && mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MainScreen()),
+        MaterialPageRoute(builder: (context) => const MainScreen()),
       );
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -472,7 +472,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return AlertDialog(
-              title: Text(
+              title: const Text(
                 'Reset Password',
                 style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
               ),
@@ -484,15 +484,15 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     'We will send a password reset link to your email address.',
                     style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextField(
-                    key: Key('resetEmailField'),
+                    key: const Key('resetEmailField'),
                     controller: resetEmailController,
                     decoration: InputDecoration(
                       labelText: 'Email Address',
                       hintText: 'email@example.com',
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                      prefixIcon: Icon(Icons.email_outlined),
+                      prefixIcon: const Icon(Icons.email_outlined),
                     ),
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -501,7 +501,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
               actions: [
                 TextButton(
                   onPressed: isResetting ? null : () => Navigator.pop(context),
-                  child: Text('Cancel', style: TextStyle(color: Colors.grey)),
+                  child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
                 ),
                 ElevatedButton(
                   onPressed: isResetting ? null : () async {
@@ -518,7 +518,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                       if (mounted) {
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Row(
                               children: [
                                 Icon(Icons.check_circle, color: Colors.white),
@@ -549,8 +549,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                   child: isResetting 
-                    ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                    : Text('Send Link'),
+                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                    : const Text('Send Link'),
                 ),
               ],
             );

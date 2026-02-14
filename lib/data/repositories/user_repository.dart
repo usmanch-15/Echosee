@@ -23,27 +23,27 @@ class LocalUserRepository implements UserRepository {
 
   @override
   Future<User?> getCurrentUser() async {
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     return _currentUser;
   }
 
   @override
   Future<void> signInWithGoogle() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     // Simulate google login
     print('Signed in with Google');
   }
 
   @override
   Future<void> signInWithFacebook() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     // Simulate facebook login
     print('Signed in with Facebook');
   }
 
   @override
   Future<User> login(String email, String password) async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
     // Simulate authentication
     final user = _users.firstWhere(
@@ -57,7 +57,7 @@ class LocalUserRepository implements UserRepository {
 
   @override
   Future<User> signup(String name, String email, String password) async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
     // Check if email exists
     if (_users.any((u) => u.email == email)) {
@@ -97,13 +97,13 @@ class LocalUserRepository implements UserRepository {
 
   @override
   Future<void> logout() async {
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 500));
     _currentUser = null;
   }
 
   @override
   Future<User> updateProfile(User user) async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
     final index = _users.indexWhere((u) => u.id == user.id);
     if (index != -1) {
@@ -116,7 +116,7 @@ class LocalUserRepository implements UserRepository {
 
   @override
   Future<void> updatePreferences(Map<String, dynamic> preferences) async {
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
 
     if (_currentUser != null) {
       final updatedUser = _currentUser!.copyWith(preferences: preferences);
@@ -130,12 +130,12 @@ class LocalUserRepository implements UserRepository {
 
   @override
   Future<void> subscribeToPremium() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
 
     if (_currentUser != null) {
       final updatedUser = _currentUser!.copyWith(
         isPremium: true,
-        premiumExpiry: DateTime.now().add(Duration(days: 30)), // 30-day trial
+        premiumExpiry: DateTime.now().add(const Duration(days: 30)), // 30-day trial
       );
 
       final index = _users.indexWhere((u) => u.id == updatedUser.id);
@@ -148,21 +148,21 @@ class LocalUserRepository implements UserRepository {
 
   @override
   Future<void> restorePremium() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     // Simulate restore purchase
     // In real app, this would connect to app store
   }
 
   @override
   Future<void> resetPassword(String email) async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     // Simulate password reset
     print('Password reset email sent to $email');
   }
 
   @override
   Future<bool> isEmailAvailable(String email) async {
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300));
     return !_users.any((u) => u.email == email);
   }
 }

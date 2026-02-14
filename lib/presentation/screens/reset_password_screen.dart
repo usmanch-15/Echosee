@@ -1,8 +1,5 @@
-// lib/presentation/screens/reset_password_screen.dart
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:echo_see_companion/core/constants/app_colors.dart';
-import 'package:echo_see_companion/providers/auth_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -32,8 +29,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      
       // Supabase uses updatePlayer with a new password when handled via deep link
       await Supabase.instance.client.auth.updateUser(
         UserAttributes(password: _passwordController.text.trim()),

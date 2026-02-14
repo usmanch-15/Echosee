@@ -43,7 +43,7 @@ void main() {
         ChangeNotifierProvider<TranscriptProvider>.value(value: mockTranscript),
         ChangeNotifierProvider<AppThemeProvider>.value(value: mockTheme),
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         home: MainScreen(),
       ),
     );
@@ -98,7 +98,7 @@ void main() {
       // Stop recording - this should trigger the save which fails
       await tester.tap(find.text('STOP RECORDING'));
       await tester.pump(); // Start the save process
-      await tester.pump(Duration(milliseconds: 500)); // Wait for snackbar to start showing
+      await tester.pump(const Duration(milliseconds: 500)); // Wait for snackbar to start showing
       
       expect(find.text('Failed to save transcript: No internet connection. Please check your network.'), findsOneWidget);
       

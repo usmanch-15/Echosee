@@ -48,8 +48,8 @@ class Helpers {
         return AlertDialog(
           content: Row(
             children: [
-              CircularProgressIndicator(),
-              SizedBox(width: 16),
+              const CircularProgressIndicator(),
+              const SizedBox(width: 16),
               Text(message),
             ],
           ),

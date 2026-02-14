@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../core/constants/app_colors.dart';
 import '../../providers/auth_provider.dart';
 import 'login_screen.dart';
 import 'main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -24,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       'title': 'Simple & Clean',
       'subtitle': 'Getting Started',
       'icon': Icons.hearing,
-      'backgroundColor': Color(0xFF4CAF50),
+      'backgroundColor': const Color(0xFF4CAF50),
       'textColor': Colors.white,
       'hasGlasses': false,
       'hasGreeting': false,
@@ -33,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       'title': 'EchoSee',
       'subtitle': 'Voice to Text Companion',
       'icon': Icons.volume_up,
-      'backgroundColor': Color(0xFF2196F3),
+      'backgroundColor': const Color(0xFF2196F3),
       'textColor': Colors.white,
       'hasGlasses': false,
       'hasGreeting': false,
@@ -42,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       'title': 'EchoSee',
       'subtitle': 'See What You Hear',
       'icon': Icons.visibility,
-      'backgroundColor': Color(0xFF9C27B0),
+      'backgroundColor': const Color(0xFF9C27B0),
       'textColor': Colors.white,
       'hasGlasses': true,
       'hasGreeting': false,
@@ -51,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       'title': 'EchoSee',
       'subtitle': 'Your Smart Assistant',
       'icon': Icons.visibility,
-      'backgroundColor': Color(0xFFFF9800),
+      'backgroundColor': const Color(0xFFFF9800),
       'textColor': Colors.white,
       'hasGlasses': true,
       'hasGreeting': true,
@@ -61,8 +62,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       'subtitle': 'Hello! How can I help you?',
       'icon': Icons.bolt,
       'backgroundColor': Colors.black,
-      'textColor': Color(0xFF00FFFF),
-      'glowColor': Color(0xFF00FF00),
+      'textColor': const Color(0xFF00FFFF),
+      'glowColor': const Color(0xFF00FF00),
       'hasGlasses': true,
       'hasGreeting': true,
       'isNeon': true,
@@ -74,7 +75,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     super.initState();
 
     _controller = AnimationController(
-      duration: Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 800),
       vsync: this,
     );
 
@@ -99,7 +100,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   }
 
   void _startAutoNavigation() {
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (_isSkipped) return;
 
       if (_currentIndex < _splashScreens.length - 1) {
@@ -130,12 +131,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     if (authProvider.isAuthenticated) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MainScreen()),
+        MaterialPageRoute(builder: (context) => const MainScreen()),
       );
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
     }
   }
@@ -197,8 +198,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   onTap: _skipToLogin,
                   borderRadius: BorderRadius.circular(20),
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Row(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: const Row(
                       children: [
                         Text(
                           'Skip',
@@ -226,7 +227,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(_splashScreens.length, (index) {
                 return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4),
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
                   width: 8,
                   height: 8,
                   decoration: BoxDecoration(
@@ -248,7 +249,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               child: FloatingActionButton.small(
                 onPressed: _previousScreen,
                 backgroundColor: Colors.white.withOpacity(0.2),
-                child: Icon(Icons.arrow_back, color: Colors.white),
+                child: const Icon(Icons.arrow_back, color: Colors.white),
               ),
             ),
 
@@ -282,7 +283,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     else
                       _buildSimpleIcon(currentScreen, isNeon),
 
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
 
                     // Title
                     if (isNeon)
@@ -308,7 +309,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         ),
                       ),
 
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
 
                     // Subtitle
                     if (currentScreen['subtitle'] != null)
@@ -361,7 +362,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         currentScreen['textColor']!.withOpacity(0.1),
                         Colors.transparent,
                       ],
-                      stops: [0.1, 0.8],
+                      stops: const [0.1, 0.8],
                     ),
                   ),
                 ),
@@ -430,7 +431,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   Widget _buildNeonText(String text, {required double fontSize, required Color color}) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(

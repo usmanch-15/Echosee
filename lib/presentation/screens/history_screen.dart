@@ -12,7 +12,7 @@ import 'package:echo_see_companion/presentation/screens/premium_features_screen.
 class HistoryScreen extends StatefulWidget {
   final String? selectedTranscriptId;
 
-  HistoryScreen({this.selectedTranscriptId});
+  const HistoryScreen({super.key, this.selectedTranscriptId});
 
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
@@ -37,17 +37,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('History'),
+        title: const Text('History'),
         actions: [
           IconButton(
-            icon: Icon(Icons.file_download),
+            icon: const Icon(Icons.file_download),
             onPressed: () => _exportAllTranscripts(),
           ),
           IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text('Search feature coming soon!'),
                   behavior: SnackBarBehavior.floating,
                 ),
@@ -70,12 +70,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget _buildPremiumBanner() {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       color: Colors.amber[100],
       child: Row(
         children: [
           Icon(Icons.info_outline, color: Colors.amber[800], size: 20),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               'Free version stores only the last 5 transcripts. Upgrade for unlimited history.',
@@ -86,10 +86,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PremiumFeaturesScreen()),
+                MaterialPageRoute(builder: (context) => const PremiumFeaturesScreen()),
               );
             },
-            child: Text('UPGRADE', style: TextStyle(fontWeight: FontWeight.bold)),
+            child: const Text('UPGRADE', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -98,7 +98,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Widget _buildTranscriptList(TranscriptProvider provider) {
     if (provider.isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (provider.error != null) {
@@ -109,7 +109,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             Text('Error: ${provider.error}'),
             ElevatedButton(
               onPressed: () => provider.loadTranscripts(),
-              child: Text('Retry'),
+              child: const Text('Retry'),
             ),
           ],
         ),
@@ -122,7 +122,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.history, size: 64, color: Colors.grey[300]),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               'No transcripts yet',
               style: TextStyle(color: Colors.grey[600], fontSize: 16),
@@ -147,7 +147,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     final themeProvider = Provider.of<AppThemeProvider>(context);
 
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       elevation: isSelected ? 4 : 1,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
@@ -155,7 +155,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           ListTile(
             leading: CircleAvatar(
               backgroundColor: AppColors.primary.withOpacity(0.1),
-              child: Icon(Icons.description, color: AppColors.primary),
+              child: const Icon(Icons.description, color: AppColors.primary),
             ),
             title: Text(
               transcript.title.isNotEmpty ? transcript.title : transcript.content,
@@ -195,8 +195,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Divider(),
-                  SizedBox(height: 8),
+                  const Divider(),
+                  const SizedBox(height: 8),
                   Text(
                     transcript.content,
                     style: TextStyle(
@@ -205,18 +205,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     ),
                   ),
                   if (transcript.speakerSegments.isNotEmpty) ...[
-                    SizedBox(height: 16),
-                    Text(
+                    const SizedBox(height: 16),
+                    const Text(
                       'Speakers (Tap to name):',
                       style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     _buildSpeakerList(transcript),
                   ],
                   if (transcript.hasTranslation) ...[
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Container(
-                      padding: EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: Colors.orange.withOpacity(0.05),
                         borderRadius: BorderRadius.circular(8),
@@ -227,24 +227,24 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.translate, size: 16, color: Colors.orange),
-                              SizedBox(width: 8),
+                              const Icon(Icons.translate, size: 16, color: Colors.orange),
+                              const SizedBox(width: 8),
                               Text(
                                 'Translation (${transcript.translatedLanguage})',
-                                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.orange),
+                                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.orange),
                               ),
                             ],
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             transcript.translatedContent ?? '',
-                            style: TextStyle(fontStyle: FontStyle.italic),
+                            style: const TextStyle(fontStyle: FontStyle.italic),
                           ),
                         ],
                       ),
                     ),
                   ],
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -255,8 +255,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         transcript.hasTranslation ? 'Re-translate' : 'Translate', 
                         () {
                           final isPrem = Provider.of<AuthProvider>(context, listen: false).isPremium;
-                          if (isPrem) _showTranslateDialog(transcript);
-                          else _showPremiumUpgradeDialog('Translation');
+                          if (isPrem) {
+                            _showTranslateDialog(transcript);
+                          } else {
+                            _showPremiumUpgradeDialog('Translation');
+                          }
                         }
                       ),
                       _buildActionButton(Icons.delete_outline, 'Delete', () => _deleteTranscript(transcript.id), color: Colors.red),
@@ -297,13 +300,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
         return ActionChip(
           avatar: CircleAvatar(
             backgroundColor: AppColors.speakerColors[entry.key % AppColors.speakerColors.length],
-            child: Text('${entry.key}', style: TextStyle(fontSize: 10, color: Colors.white)),
+            child: Text('${entry.key}', style: const TextStyle(fontSize: 10, color: Colors.white)),
           ),
           label: Text(entry.value),
           onPressed: () {
             final isPrem = Provider.of<AuthProvider>(context, listen: false).isPremium;
-            if (isPrem) _editSpeakerName(transcript.id, entry.key, entry.value);
-            else _showPremiumUpgradeDialog('Speaker Labeling');
+            if (isPrem) {
+              _editSpeakerName(transcript.id, entry.key, entry.value);
+            } else {
+              _showPremiumUpgradeDialog('Speaker Labeling');
+            }
           },
         );
       }).toList(),
@@ -314,7 +320,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Row(
+        title: const Row(
           children: [
             Icon(Icons.star, color: Colors.amber),
             SizedBox(width: 8),
@@ -323,14 +329,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
         ),
         content: Text('$feature is only available for Premium users. Upgrade now to unlock all features!'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text('Later')),
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Later')),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => PremiumFeaturesScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const PremiumFeaturesScreen()));
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-            child: Text('Upgrade'),
+            child: const Text('Upgrade'),
           ),
         ],
       ),
@@ -345,18 +351,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
         title: Text('Name Speaker $speakerId'),
         content: TextField(
           controller: controller,
-          decoration: InputDecoration(hintText: 'e.g. Roman'),
+          decoration: const InputDecoration(hintText: 'e.g. Roman'),
           autofocus: true,
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () {
               Provider.of<TranscriptProvider>(context, listen: false)
                   .updateSpeakerName(transcriptId, speakerId, controller.text);
               Navigator.pop(context);
             },
-            child: Text('Save'),
+            child: const Text('Save'),
           ),
         ],
       ),
@@ -373,7 +379,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Translate to...'),
+        title: const Text('Translate to...'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: languages.map((lang) => ListTile(
@@ -383,7 +389,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               Provider.of<TranscriptProvider>(context, listen: false)
                   .translateTranscript(transcript.id, lang['code']!);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text('Translating...'),
                   behavior: SnackBarBehavior.floating,
                 ),
@@ -398,7 +404,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text('Copied to clipboard'),
         behavior: SnackBarBehavior.floating,
       ),
@@ -407,24 +413,24 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   void _shareTranscript(Transcript transcript) {
     // Implement share logic
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Share feature coming soon!')));
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Share feature coming soon!')));
   }
 
   void _deleteTranscript(String id) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Delete Transcript'),
-        content: Text('Are you sure you want to delete this transcript?'),
+        title: const Text('Delete Transcript'),
+        content: const Text('Are you sure you want to delete this transcript?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () {
               Provider.of<TranscriptProvider>(context, listen: false).deleteTranscript(id);
               Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: Text('Delete'),
+            child: const Text('Delete'),
           ),
         ],
       ),
@@ -434,7 +440,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void _exportAllTranscripts() {
     // Implement export logic
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text('Export feature coming soon!'),
         behavior: SnackBarBehavior.floating,
       ),

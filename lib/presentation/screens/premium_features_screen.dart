@@ -4,6 +4,8 @@ import 'package:echo_see_companion/core/constants/app_colors.dart';
 import 'package:echo_see_companion/providers/auth_provider.dart';
 
 class PremiumFeaturesScreen extends StatelessWidget {
+  const PremiumFeaturesScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
@@ -11,28 +13,28 @@ class PremiumFeaturesScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Premium Features'),
+        title: const Text('Premium Features'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Icon(
+            const Icon(
               Icons.star,
               size: 80,
               color: Colors.amber,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               isPremium ? 'You are a Premium User!' : 'Upgrade to Echo See Premium',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               'Unlock the full power of transcription and translation.',
               style: TextStyle(
@@ -41,7 +43,7 @@ class PremiumFeaturesScreen extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             _buildFeatureRow(
               Icons.history,
               'Unlimited History',
@@ -62,32 +64,32 @@ class PremiumFeaturesScreen extends StatelessWidget {
               'Advanced Export',
               'Export to PDF, DOCX, and more.',
             ),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             if (authProvider.isLoading)
-              CircularProgressIndicator()
+              const CircularProgressIndicator()
             else
               ElevatedButton(
                 onPressed: () => authProvider.togglePremium(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: isPremium ? Colors.grey : Colors.amber,
                   foregroundColor: isPremium ? Colors.white : Colors.black,
-                  minimumSize: Size(double.infinity, 60),
+                  minimumSize: const Size(double.infinity, 60),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
                 ),
                 child: Text(
                   isPremium ? 'Downgrade (Mock)' : 'Upgrade Now - \$9.99/mo',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Not now'),
+              child: const Text('Not now'),
             ),
           ],
         ),
@@ -101,21 +103,21 @@ class PremiumFeaturesScreen extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: AppColors.primary.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: AppColors.primary),
           ),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),

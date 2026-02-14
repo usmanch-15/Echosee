@@ -190,7 +190,7 @@ class AppThemeProvider extends ChangeNotifier {
     fontFamily: 'Roboto',
     scaffoldBackgroundColor: Colors.grey[50],
     appBarTheme: AppBarTheme(
-      color: Colors.blue,
+      backgroundColor: Colors.blue,
       elevation: 4,
       titleTextStyle: TextStyle(
         fontSize: _fontSize + 4,
@@ -223,7 +223,7 @@ class AppThemeProvider extends ChangeNotifier {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       ),
     ),
   );
@@ -235,7 +235,7 @@ class AppThemeProvider extends ChangeNotifier {
     fontFamily: 'Roboto',
     scaffoldBackgroundColor: Colors.grey[900],
     appBarTheme: AppBarTheme(
-      color: Colors.grey[900],
+      backgroundColor: Colors.grey[900],
       elevation: 4,
       titleTextStyle: TextStyle(
         fontSize: _fontSize + 4,
@@ -268,11 +268,10 @@ class AppThemeProvider extends ChangeNotifier {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         backgroundColor: Colors.blue,
       ),
     ),
-    dialogBackgroundColor: Colors.grey[800],
-    dividerColor: Colors.grey[700],
+    dividerColor: Colors.grey[700], dialogTheme: DialogThemeData(backgroundColor: Colors.grey[800]),
   );
 }

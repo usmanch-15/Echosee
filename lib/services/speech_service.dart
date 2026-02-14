@@ -1,6 +1,10 @@
 // lib/services/speech_service.dart
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:vosk_flutter/vosk_flutter.dart';
+import 'package:sound_stream/sound_stream.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 enum SpeechRecognitionState {
   notStarted,
@@ -12,26 +16,19 @@ enum SpeechRecognitionState {
 
 class SpeechService {
   SpeechRecognitionState _state = SpeechRecognitionState.notStarted;
-  StreamController<String> _textStream = StreamController<String>.broadcast();
-  StreamController<SpeechRecognitionState> _stateStream =
+  final StreamController<String> _textStream = StreamController<String>.broadcast();
+  final StreamController<SpeechRecognitionState> _stateStream =
   StreamController<SpeechRecognitionState>.broadcast();
-  StreamController<double> _confidenceStream = StreamController<double>.broadcast();
+  final StreamController<double> _confidenceStream = StreamController<double>.broadcast();
 
-  List<String> _recognizedText = [];
-  Timer? _simulationTimer;
-  List<String> _mockConversation = [
-    "Hello, welcome to EchoSee Companion App!",
-    "This is a demonstration of real-time speech recognition.",
-    "You can see subtitles appearing as you speak.",
-    "The app supports multiple languages including English and Urdu.",
-    "Try speaking into your microphone to see live transcription.",
-    "Premium users can access translation features.",
-    "Speaker identification helps distinguish between multiple speakers.",
-    "All transcripts are saved for future reference.",
-    "You can export transcripts in various formats.",
-    "Thank you for using EchoSee Companion!",
-  ];
-  int _mockIndex = 0;
+  final List<String> _recognizedText = [];
+  
+  // Vosk & Audio Objects
+  VoskFlutterPlugin? _vosk;
+  Model? _model;
+  Recognizer? _recognizer;
+  final RecorderStream _recorder = RecorderStream();
+  StreamSubscription? _audioSubscription;
 
   Stream<String> get textStream => _textStream.stream;
   Stream<SpeechRecognitionState> get stateStream => _stateStream.stream;
@@ -40,54 +37,105 @@ class SpeechService {
   List<String> get recognizedText => List.from(_recognizedText);
 
   Future<void> initialize() async {
-    await Future.delayed(Duration(milliseconds: 500));
-    _updateState(SpeechRecognitionState.notStarted);
-    return;
+    try {
+      _updateState(SpeechRecognitionState.processing);
+      
+      _vosk = VoskFlutterPlugin.instance();
+      
+      // Load model from assets
+      // Note: This takes some time on first run as it unzips
+      final modelLoader = ModelLoader();
+      final modelPath = await modelLoader.loadFromAssets('assets/models/en.zip');
+      
+      _model = await _vosk!.createModel(modelPath);
+      
+      _recognizer = await _vosk!.createRecognizer(
+        model: _model!,
+        sampleRate: 16000,
+      );
+      
+      await _recorder.initialize();
+      
+      _updateState(SpeechRecognitionState.notStarted);
+    } catch (e) {
+      debugPrint("Vosk Initialization Error: $e");
+      _updateState(SpeechRecognitionState.error);
+    }
   }
 
   Future<void> startListening() async {
     if (_state == SpeechRecognitionState.listening) return;
+    
+    if (_recognizer == null) {
+      await initialize();
+    }
+
+    if (_state == SpeechRecognitionState.error) return;
+
+    final hasPermission = await checkPermissions();
+    if (!hasPermission) {
+      await requestPermissions();
+      if (!(await checkPermissions())) {
+        _updateState(SpeechRecognitionState.error);
+        return;
+      }
+    }
 
     _updateState(SpeechRecognitionState.listening);
     _recognizedText.clear();
 
-    // Simulate real-time speech recognition
-    _simulationTimer = Timer.periodic(Duration(milliseconds: 1500), (timer) {
-      if (_mockIndex < _mockConversation.length) {
-        final text = _mockConversation[_mockIndex];
-        _recognizedText.add(text);
-        _textStream.add(text);
-        _confidenceStream.add(0.85 + (_mockIndex % 5) * 0.03);
-        _mockIndex++;
-      } else {
-        timer.cancel();
-        stopListening();
+    // Start Recording
+    await _recorder.start();
+    
+    _audioSubscription = _recorder.audioStream.listen((data) async {
+      if (_recognizer != null) {
+        final resultFound = await _recognizer!.acceptWaveformBytes(Uint8List.fromList(data));
+        if (resultFound) {
+          final result = await _recognizer!.getResult();
+          final text = jsonDecode(result)['text'];
+          if (text != null && text.isNotEmpty) {
+            _recognizedText.add(text);
+            _textStream.add(text);
+            _confidenceStream.add(0.95); // Vosk doesn't always provide confidence in simple result
+          }
+        } else {
+          final partialResult = await _recognizer!.getPartialResult();
+          final partialText = jsonDecode(partialResult)['partial'];
+          if (partialText != null && partialText.isNotEmpty) {
+            // We can emit partial text too if we want a "live" feel
+            _textStream.add(partialText);
+          }
+        }
       }
     });
   }
 
   Future<void> stopListening() async {
-    _simulationTimer?.cancel();
-    _simulationTimer = null;
-    _mockIndex = 0;
+    if (_state != SpeechRecognitionState.listening) return;
 
-    if (_state == SpeechRecognitionState.listening) {
-      _updateState(SpeechRecognitionState.processing);
-
-      await Future.delayed(Duration(seconds: 1));
-
-      _updateState(SpeechRecognitionState.stopped);
+    _updateState(SpeechRecognitionState.processing);
+    
+    await _audioSubscription?.cancel();
+    await _recorder.stop();
+    
+    if (_recognizer != null) {
+      final finalResult = await _recognizer!.getFinalResult();
+      final text = jsonDecode(finalResult)['text'];
+      if (text != null && text.isNotEmpty) {
+        _recognizedText.add(text);
+        _textStream.add(text);
+      }
     }
-  }
 
-  Future<void> pauseListening() async {
-    _simulationTimer?.cancel();
-    _simulationTimer = null;
     _updateState(SpeechRecognitionState.stopped);
   }
 
+  Future<void> pauseListening() async {
+    await stopListening();
+  }
+
   Future<void> resumeListening() async {
-    if (_state == SpeechRecognitionState.stopped) {
+    if (_state == SpeechRecognitionState.stopped || _state == SpeechRecognitionState.notStarted) {
       await startListening();
     }
   }
@@ -98,70 +146,32 @@ class SpeechService {
   }
 
   Future<List<String>> getAvailableLanguages() async {
-    await Future.delayed(Duration(milliseconds: 300));
     return [
       'English',
-      'Urdu',
-      'Arabic',
-      'French',
-      'Chinese',
-      'Spanish',
-      'German',
-      'Japanese',
-      'Korean',
-      'Russian',
+      'Urdu', // Note: Offline Urdu requires another model
     ];
   }
 
   Future<void> setLanguage(String languageCode) async {
-    await Future.delayed(Duration(milliseconds: 200));
-    print('Language set to: $languageCode');
+    // For now we only have English model bundled
+    debugPrint('Language set to: $languageCode');
   }
 
   Future<bool> checkPermissions() async {
-    await Future.delayed(Duration(milliseconds: 300));
-    return true; // Mock permission granted
+    return await Permission.microphone.isGranted;
   }
 
   Future<void> requestPermissions() async {
-    await Future.delayed(Duration(seconds: 1));
-    // Mock permission request
-  }
-
-  // Speaker identification simulation
-  List<Map<String, dynamic>> identifySpeakers(List<String> transcript) {
-    final speakers = <Map<String, dynamic>>[];
-    int currentSpeaker = 0;
-
-    for (int i = 0; i < transcript.length; i++) {
-      if (i > 0 && i % 3 == 0) {
-        currentSpeaker = (currentSpeaker + 1) % 3;
-      }
-
-      speakers.add({
-        'speakerId': currentSpeaker,
-        'text': transcript[i],
-        'confidence': 0.8 + (i % 5) * 0.04,
-        'timestamp': DateTime.now().add(Duration(seconds: i * 2)),
-      });
-    }
-
-    return speakers;
+    await Permission.microphone.request();
   }
 
   Future<List<String>> processOfflineAudio(String audioPath) async {
-    await Future.delayed(Duration(seconds: 2));
-
-    return [
-      "This is offline speech recognition.",
-      "Processing completed successfully.",
-      "Transcript saved to local storage.",
-    ];
+    // This would involve reading a file and feeding it to the recognizer
+    return ["Offline file processing not implemented via mic stream"];
   }
 
   Future<double> getAccuracyScore() async {
-    await Future.delayed(Duration(milliseconds: 200));
-    return 0.92; // Mock accuracy score
+    return 0.95;
   }
 
   void _updateState(SpeechRecognitionState newState) {
@@ -170,7 +180,10 @@ class SpeechService {
   }
 
   void dispose() {
-    _simulationTimer?.cancel();
+    _audioSubscription?.cancel();
+    _recorder.stop();
+    _recognizer?.dispose();
+    _model?.dispose();
     _textStream.close();
     _stateStream.close();
     _confidenceStream.close();

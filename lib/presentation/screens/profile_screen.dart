@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:echo_see_companion/core/constants/app_colors.dart';
-import 'package:echo_see_companion/core/constants/app_strings.dart';
 import 'package:echo_see_companion/data/models/user_model.dart';
 import 'package:echo_see_companion/providers/auth_provider.dart';
 import 'package:echo_see_companion/providers/transcript_provider.dart';
-import 'login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }

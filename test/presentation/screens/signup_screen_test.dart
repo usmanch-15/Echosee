@@ -21,7 +21,7 @@ void main() {
     return MaterialApp(
       home: ChangeNotifierProvider<AuthProvider>.value(
         value: mockAuthProvider,
-        child: SignupScreen(),
+        child: const SignupScreen(),
       ),
     );
   }

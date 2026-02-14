@@ -36,7 +36,7 @@ class LocalTranscriptRepository implements TranscriptRepository {
     String? filter,
     String? sortBy,
   }) async {
-    await Future.delayed(Duration(milliseconds: 500)); // Simulate delay
+    await Future.delayed(const Duration(milliseconds: 500)); // Simulate delay
 
     List<Transcript> filtered = List.from(_transcripts);
 
@@ -82,14 +82,14 @@ class LocalTranscriptRepository implements TranscriptRepository {
 
   @override
   Future<Transcript> getTranscript(String id) async {
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300));
     final transcript = _transcripts.firstWhere((t) => t.id == id);
     return transcript;
   }
 
   @override
   Future<Transcript> saveTranscript(Transcript transcript) async {
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
 
     // Check if we need to delete oldest (for free users)
     if (_transcripts.length >= _maxFreeTranscripts) {
@@ -104,7 +104,7 @@ class LocalTranscriptRepository implements TranscriptRepository {
 
   @override
   Future<void> updateTranscript(Transcript transcript) async {
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     final index = _transcripts.indexWhere((t) => t.id == transcript.id);
     if (index != -1) {
       _transcripts[index] = transcript;
@@ -113,19 +113,19 @@ class LocalTranscriptRepository implements TranscriptRepository {
 
   @override
   Future<void> deleteTranscript(String id) async {
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     _transcripts.removeWhere((t) => t.id == id);
   }
 
   @override
   Future<void> deleteAllTranscripts() async {
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 500));
     _transcripts.clear();
   }
 
   @override
   Future<List<Transcript>> searchTranscripts(String query) async {
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300));
     return _transcripts.where((t) =>
     t.title.toLowerCase().contains(query.toLowerCase()) ||
         t.content.toLowerCase().contains(query.toLowerCase())
@@ -134,13 +134,13 @@ class LocalTranscriptRepository implements TranscriptRepository {
 
   @override
   Future<int> getTranscriptCount() async {
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     return _transcripts.length;
   }
 
   @override
   Future<double> getStorageUsed() async {
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     // Simulate storage calculation
     final baseSize = _transcripts.length * 0.1; // 0.1 MB per transcript
     return baseSize;
@@ -148,14 +148,14 @@ class LocalTranscriptRepository implements TranscriptRepository {
 
   @override
   Future<void> exportTranscripts(String format) async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     // Simulate export
     print('Exporting ${_transcripts.length} transcripts as $format');
   }
 
   @override
   Future<void> starTranscript(String id, bool starred) async {
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     final index = _transcripts.indexWhere((t) => t.id == id);
     if (index != -1) {
       final transcript = _transcripts[index];
@@ -165,7 +165,7 @@ class LocalTranscriptRepository implements TranscriptRepository {
 
   @override
   Future<List<Transcript>> getStarredTranscripts() async {
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     return _transcripts.where((t) => t.isStarred).toList();
   }
 }

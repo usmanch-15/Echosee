@@ -7,7 +7,7 @@ class TranslationRepository {
 
   Future<String> translateText(String text, String targetLanguage) async {
     // Mock API call delay
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
 
     // Simple mock translation logic
     if (targetLanguage == 'ES') {

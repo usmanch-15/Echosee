@@ -11,12 +11,12 @@ class AnimatedSubtitle extends StatefulWidget {
   final int? speakerIndex;
 
   const AnimatedSubtitle({
-    Key? key,
+    super.key,
     required this.text,
     required this.color,
     required this.fontSize,
     this.speakerIndex,
-  }) : super(key: key);
+  });
 
   @override
   _AnimatedSubtitleState createState() => _AnimatedSubtitleState();
@@ -34,7 +34,7 @@ class _AnimatedSubtitleState extends State<AnimatedSubtitle>
     super.initState();
 
     _controller = AnimationController(
-      duration: Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 400),
       vsync: this,
     );
 
@@ -46,7 +46,7 @@ class _AnimatedSubtitleState extends State<AnimatedSubtitle>
     );
 
     _slideAnimation = Tween<Offset>(
-      begin: Offset(0, 0.1),
+      begin: const Offset(0, 0.1),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(
@@ -74,8 +74,8 @@ class _AnimatedSubtitleState extends State<AnimatedSubtitle>
         child: ScaleTransition(
           scale: _scaleAnimation,
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            padding: EdgeInsets.all(16),
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.7),
               borderRadius: BorderRadius.circular(12),
@@ -95,7 +95,7 @@ class _AnimatedSubtitleState extends State<AnimatedSubtitle>
                   Container(
                     width: 8,
                     height: 8,
-                    margin: EdgeInsets.only(right: 12, top: 8),
+                    margin: const EdgeInsets.only(right: 12, top: 8),
                     decoration: BoxDecoration(
                       color: AppColors.speakerColors[widget.speakerIndex! % AppColors.speakerColors.length],
                       shape: BoxShape.circle,

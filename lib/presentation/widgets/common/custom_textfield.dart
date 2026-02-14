@@ -26,7 +26,7 @@ class CustomTextField extends StatefulWidget {
   final bool showErrorBorder;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     this.controller,
     required this.labelText,
     this.hintText,
@@ -47,7 +47,7 @@ class CustomTextField extends StatefulWidget {
     this.filled = true,
     this.errorText,
     this.showErrorBorder = false,
-  }) : super(key: key);
+  });
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -142,20 +142,20 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppBorderRadius.md),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: Colors.red,
                 width: 2,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppBorderRadius.md),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: Colors.red,
                 width: 2,
               ),
             ),
             errorText: widget.errorText,
-            errorStyle: TextStyle(
+            errorStyle: const TextStyle(
               fontSize: 12,
               color: Colors.red,
             ),
@@ -172,7 +172,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             padding: const EdgeInsets.only(top: 4.0, left: 8.0),
             child: Text(
               widget.errorText!,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12,
                 color: Colors.red,
               ),
@@ -216,11 +216,11 @@ class EmailTextField extends StatelessWidget {
   final void Function(String)? onChanged;
 
   const EmailTextField({
-    Key? key,
+    super.key,
     this.controller,
     this.validator,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -255,14 +255,14 @@ class PasswordTextField extends StatelessWidget {
   final bool showStrengthIndicator;
 
   const PasswordTextField({
-    Key? key,
+    super.key,
     this.controller,
     this.validator,
     this.onChanged,
     this.labelText = 'Password',
     this.hintText = 'Enter your password',
     this.showStrengthIndicator = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

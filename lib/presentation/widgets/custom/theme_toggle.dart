@@ -6,10 +6,10 @@ class ThemeToggle extends StatefulWidget {
   final ValueChanged<bool>? onChanged;
 
   const ThemeToggle({
-    Key? key,
+    super.key,
     this.initialValue = false,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   _ThemeToggleState createState() => _ThemeToggleState();
@@ -36,7 +36,7 @@ class _ThemeToggleState extends State<ThemeToggle> {
           widget.onChanged!(value);
         }
       },
-      activeColor: Theme.of(context).primaryColor,
+      activeThumbColor: Theme.of(context).primaryColor,
     );
   }
 }

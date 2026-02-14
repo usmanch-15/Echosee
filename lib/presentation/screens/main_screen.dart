@@ -8,12 +8,14 @@ import 'package:echo_see_companion/presentation/screens/profile_screen.dart';
 import 'package:echo_see_companion/presentation/screens/features_screen.dart';
 import 'package:echo_see_companion/providers/transcript_provider.dart';
 import 'package:echo_see_companion/providers/app_theme_provider.dart';
-import 'package:echo_see_companion/providers/auth_provider.dart';
 import 'package:echo_see_companion/data/models/transcript_model.dart';
+import 'package:echo_see_companion/services/speech_service.dart';
 
 class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
   @override
-  _MainScreenState createState() => _MainScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
@@ -38,6 +40,15 @@ class _MainScreenState extends State<MainScreen> {
     // Load transcripts when screen opens
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<TranscriptProvider>(context, listen: false).loadTranscripts();
+      speechService.initialize();
+    });
+
+    _liveSub = speechService.textStream.listen((text) {
+      if (isRecording) {
+        setState(() {
+          _liveText = text;
+        });
+      }
     });
   }
 
@@ -46,10 +57,10 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.menu, size: 30),
+          icon: const Icon(Icons.menu, size: 30),
           onPressed: _showMenuDrawer,
         ),
-        title: Text(
+        title: const Text(
           'Echo See',
         ),
         centerTitle: true,
@@ -61,12 +72,12 @@ class _MainScreenState extends State<MainScreen> {
             // Main Box with greeting and controls
             _buildMainBox(),
 
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
 
             // Recent Transcripts Section
             _buildRecentTranscripts(),
 
-            SizedBox(height: 80), // Space for bottom navigation
+            const SizedBox(height: 80), // Space for bottom navigation
           ],
         ),
       ),
@@ -80,8 +91,8 @@ class _MainScreenState extends State<MainScreen> {
 
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.all(16),
-      padding: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: isDark ? Colors.grey[850] : Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -90,7 +101,7 @@ class _MainScreenState extends State<MainScreen> {
             color: Colors.black.withOpacity(0.1),
             blurRadius: 15,
             spreadRadius: 2,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
         border: Border.all(color: isDark ? Colors.grey[700]! : Colors.grey[300]!, width: 1),
@@ -109,11 +120,11 @@ class _MainScreenState extends State<MainScreen> {
           ),
 
           if (isRecording) ...[
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Container(
               height: 100,
               width: double.infinity,
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: isDark ? Colors.black26 : Colors.grey[100],
                 borderRadius: BorderRadius.circular(10),
@@ -131,7 +142,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ],
 
-          if (!isRecording) SizedBox(height: 8),
+          if (!isRecording) const SizedBox(height: 8),
 
           // Urdu Text (if language is Urdu)
           if (selectedLanguage == 'اردو' && !isRecording)
@@ -143,7 +154,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
 
-          SizedBox(height: 25),
+          const SizedBox(height: 25),
 
           // Language Toggle and Recording Status
           Row(
@@ -165,12 +176,12 @@ class _MainScreenState extends State<MainScreen> {
                             });
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                             decoration: BoxDecoration(
                               color: selectedLanguage == 'ENG'
                                   ? AppColors.primary
                                   : Colors.transparent,
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(10),
                                 bottomLeft: Radius.circular(10),
                               ),
@@ -203,12 +214,12 @@ class _MainScreenState extends State<MainScreen> {
                             });
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                             decoration: BoxDecoration(
                               color: selectedLanguage == 'اردو'
                                   ? AppColors.primary
                                   : Colors.transparent,
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 topRight: Radius.circular(10),
                                 bottomRight: Radius.circular(10),
                               ),
@@ -233,12 +244,12 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
 
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
 
               // Recording Status
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   decoration: BoxDecoration(
                     color: isRecording ? Colors.red.withOpacity(0.1) : Colors.green.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
@@ -255,7 +266,7 @@ class _MainScreenState extends State<MainScreen> {
                         color: isRecording ? Colors.red : Colors.green,
                         size: 22,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,7 +297,7 @@ class _MainScreenState extends State<MainScreen> {
             ],
           ),
 
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           // Record/Stop Button
           GestureDetector(
@@ -299,7 +310,7 @@ class _MainScreenState extends State<MainScreen> {
             },
             child: Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: 16),
               decoration: BoxDecoration(
                 color: isRecording ? Colors.red : AppColors.primary,
                 borderRadius: BorderRadius.circular(12),
@@ -308,7 +319,7 @@ class _MainScreenState extends State<MainScreen> {
                     color: (isRecording ? Colors.red : AppColors.primary).withOpacity(0.3),
                     blurRadius: 8,
                     spreadRadius: 2,
-                    offset: Offset(0, 3),
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
@@ -320,7 +331,7 @@ class _MainScreenState extends State<MainScreen> {
                     color: Colors.white,
                     size: 28,
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Text(
                     isRecording ? 'STOP RECORDING' : 'START RECORDING',
                     style: TextStyle(
@@ -334,13 +345,13 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
 
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
 
           // Auto Record Toggle
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
+              const Row(
                 children: [
                   Icon(
                     Icons.auto_awesome,
@@ -359,7 +370,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
               Switch(
                 value: autoRecord,
-                activeColor: AppColors.primary,
+                activeThumbColor: AppColors.primary,
                 onChanged: (value) {
                   setState(() {
                     autoRecord = value;
@@ -378,14 +389,14 @@ class _MainScreenState extends State<MainScreen> {
     final recentTranscripts = transcriptProvider.transcripts.take(4).toList();
 
     return Container(
-      margin: EdgeInsets.all(16),
+      margin: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Recent Transcripts',
                 style: TextStyle(
                   fontSize: 20,
@@ -396,20 +407,20 @@ class _MainScreenState extends State<MainScreen> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HistoryScreen()),
+                    MaterialPageRoute(builder: (context) => const HistoryScreen()),
                   );
                 },
-                child: Text('View All'),
+                child: const Text('View All'),
               ),
             ],
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           if (transcriptProvider.isLoading && recentTranscripts.isEmpty)
-            Center(child: CircularProgressIndicator())
+            const Center(child: CircularProgressIndicator())
           else if (recentTranscripts.isEmpty)
             Center(
               child: Container(
-                padding: EdgeInsets.all(24),
+                padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   color: Colors.grey[50],
                   borderRadius: BorderRadius.circular(20),
@@ -421,7 +432,7 @@ class _MainScreenState extends State<MainScreen> {
                       size: 64, 
                       color: AppColors.primary.withOpacity(0.2)
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Text(
                       'No transcripts yet', 
                       style: TextStyle(
@@ -430,7 +441,7 @@ class _MainScreenState extends State<MainScreen> {
                         fontWeight: FontWeight.bold
                       )
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       'Tap the record button to start your first live transcription session.', 
                       textAlign: TextAlign.center,
@@ -441,7 +452,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
             )
           else
-            ...recentTranscripts.map((t) => _buildTranscriptCard(t)).toList(),
+            ...recentTranscripts.map((t) => _buildTranscriptCard(t)),
         ],
       ),
     );
@@ -449,21 +460,21 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildTranscriptCard(Transcript transcript) {
     return Card(
-      margin: EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: AppColors.primary.withOpacity(0.1),
-          child: Icon(Icons.description, color: AppColors.primary),
+          child: const Icon(Icons.description, color: AppColors.primary),
         ),
         title: Text(
           transcript.title.isNotEmpty ? transcript.title : transcript.content,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontWeight: FontWeight.w500),
+          style: const TextStyle(fontWeight: FontWeight.w500),
         ),
         subtitle: Text('${transcript.formattedDate} • ${transcript.formattedDuration}'),
-        trailing: Icon(Icons.chevron_right),
+        trailing: const Icon(Icons.chevron_right),
         onTap: () {
           Navigator.push(
             context,
@@ -483,31 +494,16 @@ class _MainScreenState extends State<MainScreen> {
       _liveText = '';
     });
     
-    // Mocking Live Subtitles animation (Day 3 feature)
-    List<String> mockWords = [
-      'Welcome', 'to', 'Echo', 'See.', 'Transcribing', 'your', 'voice', 'now...',
-      'This', 'is', 'a', 'live', 'realtime', 'subtitle', 'demo.', 'Pretty', 'cool', 'right?'
-    ];
-    int wordIndex = 0;
-    
-    // Timer to simulate live streaming data
-    _liveTimer = Timer.periodic(Duration(milliseconds: 600), (timer) {
-      if (!isRecording) {
-        timer.cancel();
-        return;
-      }
-      setState(() {
-        _liveText += mockWords[wordIndex % mockWords.length] + ' ';
-        wordIndex++;
-      });
-    });
+    speechService.startListening();
   }
 
   void _stopRecording() async {
     final duration = DateTime.now().difference(_recordingStartTime ?? DateTime.now());
+    
+    await speechService.stopListening();
+    
     setState(() {
       isRecording = false;
-      _liveTimer?.cancel();
     });
 
     // Mock transcript content creation
@@ -533,7 +529,7 @@ class _MainScreenState extends State<MainScreen> {
       await provider.saveTranscript(newTranscript);
       
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Transcript saved!'),
           backgroundColor: Colors.green,
           behavior: SnackBarBehavior.floating,
@@ -554,29 +550,29 @@ class _MainScreenState extends State<MainScreen> {
   void _showMenuDrawer() {
     showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => Container(
-        padding: EdgeInsets.symmetric(vertical: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildDrawerItem(Icons.history, 'History', () {
               Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const HistoryScreen()));
             }),
             _buildDrawerItem(Icons.star, 'Features', () {
               Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => FeaturesScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const FeaturesScreen()));
             }),
             _buildDrawerItem(Icons.settings, 'Settings', () {
               Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsScreen()));
             }),
             _buildDrawerItem(Icons.person, 'Account', () {
               Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
             }),
           ],
         ),
@@ -587,17 +583,17 @@ class _MainScreenState extends State<MainScreen> {
   Widget _buildDrawerItem(IconData icon, String title, VoidCallback onTap) {
     return ListTile(
       leading: Icon(icon, color: AppColors.primary),
-      title: Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+      title: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
       onTap: onTap,
     );
   }
 
   Widget _buildBottomNavigationBar() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(color: Colors.black12, blurRadius: 10),
         ],
       ),
@@ -606,10 +602,10 @@ class _MainScreenState extends State<MainScreen> {
         children: [
           _buildNavItem(Icons.home, 'Home', true, () {}),
           _buildNavItem(Icons.history, 'History', false, () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const HistoryScreen()));
           }),
           _buildNavItem(Icons.person, 'Profile', false, () {
-             Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+             Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
           }),
         ],
       ),

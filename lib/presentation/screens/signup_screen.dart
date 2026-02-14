@@ -9,6 +9,8 @@ import 'login_screen.dart';
 import 'package:echo_see_companion/providers/auth_provider.dart';
 
 class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
+
   @override
   _SignupScreenState createState() => _SignupScreenState();
 }
@@ -24,7 +26,6 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
   late Animation<Offset> _slideAnimation;
   late Animation<double> _fadeAnimation;
 
-  bool _isLoading = false;
   bool _termsAccepted = false;
 
   @override
@@ -32,12 +33,12 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
     super.initState();
 
     _controller = AnimationController(
-      duration: Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 800),
       vsync: this,
     );
 
     _slideAnimation = Tween<Offset>(
-      begin: Offset(0, 0.3),
+      begin: const Offset(0, 0.3),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(
@@ -64,7 +65,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(AppSpacing.xl),
+          padding: const EdgeInsets.all(AppSpacing.xl),
           child: Form(
             key: _formKey,
             child: Column(
@@ -73,10 +74,10 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
                 // Back Button
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.arrow_back),
                 ),
 
-                SizedBox(height: AppSpacing.xl),
+                const SizedBox(height: AppSpacing.xl),
 
                 // Header with Animation
                 SlideTransition(
@@ -84,14 +85,14 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Create Account',
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: AppSpacing.sm),
+                      const SizedBox(height: AppSpacing.sm),
                       Text(
                         'Sign up to get started with EchoSee',
                         style: TextStyle(
@@ -103,7 +104,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
                   ),
                 ),
 
-                SizedBox(height: AppSpacing.xxl),
+                const SizedBox(height: AppSpacing.xxl),
 
                 // Full Name Field
                 FadeTransition(
@@ -125,7 +126,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
                   ),
                 ),
 
-                SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.lg),
 
                 // Email Field
                 FadeTransition(
@@ -148,7 +149,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
                   ),
                 ),
 
-                SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.lg),
 
                 // Password Field
                 FadeTransition(
@@ -171,7 +172,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
                   ),
                 ),
 
-                SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.lg),
 
                 // Confirm Password Field
                 FadeTransition(
@@ -194,7 +195,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
                   ),
                 ),
 
-                SizedBox(height: AppSpacing.md),
+                const SizedBox(height: AppSpacing.md),
 
                 // Terms & Conditions
                 Row(
@@ -218,7 +219,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
                             style: TextStyle(
                               color: Theme.of(context).textTheme.bodyMedium!.color,
                             ),
-                            children: [
+                            children: const [
                               TextSpan(
                                 text: 'Terms & Conditions',
                                 style: TextStyle(
@@ -242,7 +243,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
                   ],
                 ),
 
-                SizedBox(height: AppSpacing.xl),
+                const SizedBox(height: AppSpacing.xl),
 
                 // Signup Button
                 Consumer<AuthProvider>(
@@ -255,14 +256,14 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
                   },
                 ),
 
-                SizedBox(height: AppSpacing.xl),
+                const SizedBox(height: AppSpacing.xl),
 
                 // Divider
                 Row(
                   children: [
                     Expanded(child: Divider(color: Colors.grey[300])),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Text(
                         'or sign up with',
                         style: TextStyle(fontSize: 14, color: Colors.grey[500]),
@@ -272,7 +273,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
                   ],
                 ),
 
-                SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.lg),
 
                 // Social buttons
                 Row(
@@ -283,7 +284,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
                       label: 'Google',
                       onPressed: () => context.read<AuthProvider>().signInWithGoogle(),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     _buildSocialButton(
                       icon: Icons.facebook,
                       label: 'Facebook',
@@ -292,22 +293,22 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
                   ],
                 ),
 
-                SizedBox(height: AppSpacing.xl),
+                const SizedBox(height: AppSpacing.xl),
 
                 // Already have account
                 Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Already have an account? '),
+                      const Text('Already have an account? '),
                       TextButton(
                         onPressed: () {
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => LoginScreen()),
+                            MaterialPageRoute(builder: (context) => const LoginScreen()),
                           );
                         },
-                        child: Text(
+                        child: const Text(
                           'Sign In',
                           style: TextStyle(
                             color: AppColors.primary,
@@ -330,7 +331,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
     if (_formKey.currentState!.validate()) {
       if (!_termsAccepted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Please accept terms and conditions')),
+          const SnackBar(content: Text('Please accept terms and conditions')),
         );
         return;
       }
@@ -345,7 +346,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
       if (success && mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => MainScreen()),
+          MaterialPageRoute(builder: (context) => const MainScreen()),
         );
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -364,8 +365,8 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Terms & Conditions'),
-          content: SingleChildScrollView(
+          title: const Text('Terms & Conditions'),
+          content: const SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -389,7 +390,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Close'),
+              child: const Text('Close'),
             ),
             TextButton(
               onPressed: () {
@@ -398,7 +399,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
                 });
                 Navigator.pop(context);
               },
-              child: Text('Agree'),
+              child: const Text('Agree'),
             ),
           ],
         );
@@ -418,7 +419,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
       style: OutlinedButton.styleFrom(
         foregroundColor: Colors.grey[700],
         side: BorderSide(color: Colors.grey[300]!),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),

@@ -26,7 +26,7 @@ void main() {
     return MaterialApp(
       home: ChangeNotifierProvider<AuthProvider>.value(
         value: mockAuthProvider,
-        child: LoginScreen(),
+        child: const LoginScreen(),
       ),
     );
   }
@@ -60,7 +60,7 @@ void main() {
       await tester.pump(); // Handle the result and trigger SnackBar
       
       // SnackBar needs time to animate
-      await tester.pump(Duration(milliseconds: 750));
+      await tester.pump(const Duration(milliseconds: 750));
 
       // Assert
       expect(find.byType(SnackBar), findsOneWidget);

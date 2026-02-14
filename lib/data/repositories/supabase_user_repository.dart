@@ -79,7 +79,7 @@ class SupabaseUserRepository implements UserRepository {
     }
 
     // Wait for trigger to create user entry
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
     final user = await getCurrentUser();
     if (user == null) throw Exception('User data not found after signup');
@@ -118,7 +118,7 @@ class SupabaseUserRepository implements UserRepository {
 
     await _client.from('users').update({
       'is_premium': true,
-      'premium_expiry': DateTime.now().add(Duration(days: 30)).toIso8601String(),
+      'premium_expiry': DateTime.now().add(const Duration(days: 30)).toIso8601String(),
     }).eq('id', userId);
   }
 

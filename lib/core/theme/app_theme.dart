@@ -7,15 +7,14 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primaryColor: AppColors.primary,
-    colorScheme: ColorScheme.light(
+    colorScheme: const ColorScheme.light(
       primary: AppColors.primary,
       secondary: AppColors.accent,
-      background: AppColors.backgroundLight,
       surface: AppColors.cardLight,
     ),
     scaffoldBackgroundColor: AppColors.backgroundLight,
-    appBarTheme: AppBarTheme(
-      color: AppColors.primary,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.primary,
       elevation: 0,
       centerTitle: true,
       titleTextStyle: TextStyle(
@@ -45,15 +44,14 @@ class AppTheme {
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     primaryColor: AppColors.primary,
-    colorScheme: ColorScheme.dark(
+    colorScheme: const ColorScheme.dark(
       primary: AppColors.primary,
       secondary: AppColors.accent,
-      background: AppColors.backgroundDark,
       surface: AppColors.cardDark,
     ),
     scaffoldBackgroundColor: AppColors.backgroundDark,
-    appBarTheme: AppBarTheme(
-      color: AppColors.cardDark,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.cardDark,
       elevation: 0,
       centerTitle: true,
       titleTextStyle: TextStyle(

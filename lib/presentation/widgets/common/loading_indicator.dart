@@ -21,7 +21,7 @@ class LoadingIndicator extends StatelessWidget {
   final EdgeInsetsGeometry padding;
 
   const LoadingIndicator({
-    Key? key,
+    super.key,
     this.type = LoadingIndicatorType.circular,
     this.color,
     this.backgroundColor,
@@ -30,7 +30,7 @@ class LoadingIndicator extends StatelessWidget {
     this.message,
     this.showMessage = false,
     this.padding = EdgeInsets.zero,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class LoadingIndicator extends StatelessWidget {
         children: [
           _buildIndicator(),
           if (showMessage) ...[
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               message ?? 'Loading...',
               style: TextStyle(
@@ -109,10 +109,9 @@ class _DotsLoadingIndicator extends StatefulWidget {
   final double size;
 
   const _DotsLoadingIndicator({
-    Key? key,
     required this.color,
     required this.size,
-  }) : super(key: key);
+  });
 
   @override
   __DotsLoadingIndicatorState createState() => __DotsLoadingIndicatorState();
@@ -126,7 +125,7 @@ class __DotsLoadingIndicatorState extends State<_DotsLoadingIndicator>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 800),
       vsync: this,
     )..repeat();
   }
@@ -137,7 +136,7 @@ class __DotsLoadingIndicatorState extends State<_DotsLoadingIndicator>
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(3, (index) {
         return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
           child: ScaleTransition(
             scale: TweenSequence([
               TweenSequenceItem(
@@ -184,10 +183,9 @@ class _PulseLoadingIndicator extends StatefulWidget {
   final double size;
 
   const _PulseLoadingIndicator({
-    Key? key,
     required this.color,
     required this.size,
-  }) : super(key: key);
+  });
 
   @override
   __PulseLoadingIndicatorState createState() => __PulseLoadingIndicatorState();
@@ -201,7 +199,7 @@ class __PulseLoadingIndicatorState extends State<_PulseLoadingIndicator>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 1500),
       vsync: this,
     )..repeat();
   }
@@ -257,11 +255,11 @@ class FullScreenLoader extends StatelessWidget {
   final bool showCloseButton;
 
   const FullScreenLoader({
-    Key? key,
+    super.key,
     this.message = 'Loading...',
     this.backgroundColor = Colors.black54,
     this.showCloseButton = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -278,10 +276,10 @@ class FullScreenLoader extends StatelessWidget {
             message: message,
           ),
           if (showCloseButton) ...[
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text(
+              child: const Text(
                 'Cancel',
                 style: TextStyle(color: Colors.white),
               ),
@@ -302,13 +300,13 @@ class ShimmerLoading extends StatelessWidget {
   final Color highlightColor;
 
   const ShimmerLoading({
-    Key? key,
+    super.key,
     this.width = double.infinity,
     this.height = 20,
     this.borderRadius = BorderRadius.zero,
     this.baseColor = const Color(0xFFE0E0E0),
     this.highlightColor = const Color(0xFFF5F5F5),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -329,10 +327,10 @@ class ShimmerList extends StatelessWidget {
   final EdgeInsetsGeometry itemPadding;
 
   const ShimmerList({
-    Key? key,
+    super.key,
     this.itemCount = 5,
     this.itemPadding = const EdgeInsets.symmetric(vertical: 8),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -351,7 +349,7 @@ class ShimmerList extends StatelessWidget {
                 height: 48,
                 borderRadius: BorderRadius.circular(24),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -362,7 +360,7 @@ class ShimmerList extends StatelessWidget {
                       height: 16,
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     // Subtitle shimmer
                     ShimmerLoading(
                       width: MediaQuery.of(context).size.width * 0.7,
