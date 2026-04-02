@@ -1,0 +1,12 @@
+=== STT Session Log ===
+Started : 2026-03-10 15:06:36
+========================================
+
+[15:06:42] (0.66s)  Good afternoon, my name is Zuhra Amjit.
+[15:06:51] (0.68s)  Today I will be telling you about this offline STT system.
+[15:07:00] (0.70s)  It works off-late, it looks simple too, I absorb some initials as well.
+
+========================================
+Ended   : 2026-03-10 15:07:05
+Duration: 29.2s
+Entries : 3

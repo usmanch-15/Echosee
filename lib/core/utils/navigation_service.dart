@@ -1,4 +1,5 @@
 // lib/core/utils/navigation_service.dart
+import 'package:echo_see_companion/presentation/screens/ai_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../presentation/screens/login_screen.dart';
@@ -12,7 +13,8 @@ import '../../presentation/screens/transcript_list_screen.dart';
 import '../../presentation/screens/reset_password_screen.dart';
 
 class NavigationService {
-  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
 
   static BuildContext? get context => navigatorKey.currentContext;
 
@@ -24,9 +26,9 @@ class NavigationService {
   }
 
   static Future<dynamic> navigateToWithReplacement(
-      String routeName, {
-        Object? arguments,
-      }) {
+    String routeName, {
+    Object? arguments,
+  }) {
     return navigatorKey.currentState!.pushReplacementNamed(
       routeName,
       arguments: arguments,
@@ -34,10 +36,10 @@ class NavigationService {
   }
 
   static Future<dynamic> navigateToAndRemoveUntil(
-      String routeName, {
-        Object? arguments,
-        bool Function(Route<dynamic>)? predicate,
-      }) {
+    String routeName, {
+    Object? arguments,
+    bool Function(Route<dynamic>)? predicate,
+  }) {
     return navigatorKey.currentState!.pushNamedAndRemoveUntil(
       routeName,
       predicate ?? (_) => false,
@@ -78,7 +80,9 @@ class NavigationService {
         return MaterialPageRoute(builder: (_) => const PremiumFeaturesScreen());
       case '/reset-password':
         return MaterialPageRoute(builder: (_) => const ResetPasswordScreen());
-      
+      case '/ai_screen':
+        return MaterialPageRoute(builder: (_) => const AIScreen());
+
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
@@ -105,7 +109,8 @@ class NavigationService {
 
   static Future<dynamic> showDialog({
     required WidgetBuilder builder,
-    bool barrierDismissible = true, required BuildContext context,
+    bool barrierDismissible = true,
+    required BuildContext context,
   }) {
     return showDialog(
       context: navigatorKey.currentContext!,
@@ -139,21 +144,22 @@ class FadeSlideRoute extends PageRouteBuilder {
 
   FadeSlideRoute({required this.builder})
       : super(
-    pageBuilder: (context, animation, secondaryAnimation) => builder(context),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      return FadeTransition(
-        opacity: animation,
-        child: SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, 0.1),
-            end: Offset.zero,
-          ).animate(animation),
-          child: child,
-        ),
-      );
-    },
-    transitionDuration: const Duration(milliseconds: 400),
-  );
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              builder(context),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 0.1),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              ),
+            );
+          },
+          transitionDuration: const Duration(milliseconds: 400),
+        );
 }
 
 class ScaleRoute extends PageRouteBuilder {
@@ -161,23 +167,24 @@ class ScaleRoute extends PageRouteBuilder {
 
   ScaleRoute({required this.builder})
       : super(
-    pageBuilder: (context, animation, secondaryAnimation) => builder(context),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      return ScaleTransition(
-        scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: animation,
-            curve: Curves.fastOutSlowIn,
-          ),
-        ),
-        child: FadeTransition(
-          opacity: animation,
-          child: child,
-        ),
-      );
-    },
-    transitionDuration: const Duration(milliseconds: 500),
-  );
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              builder(context),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return ScaleTransition(
+              scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.fastOutSlowIn,
+                ),
+              ),
+              child: FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            );
+          },
+          transitionDuration: const Duration(milliseconds: 500),
+        );
 }
 
 class SlideRightRoute extends PageRouteBuilder {
@@ -185,15 +192,16 @@ class SlideRightRoute extends PageRouteBuilder {
 
   SlideRightRoute({required this.builder})
       : super(
-    pageBuilder: (context, animation, secondaryAnimation) => builder(context),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      return SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(1, 0),
-          end: Offset.zero,
-        ).animate(animation),
-        child: child,
-      );
-    },
-  );
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              builder(context),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(1, 0),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            );
+          },
+        );
 }

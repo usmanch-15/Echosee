@@ -1,0 +1,14 @@
+=== STT Session Log ===
+Started : 2026-03-10 15:07:21
+========================================
+
+[15:07:27] (0.62s)  My name is Muhammad Ali.
+[15:07:34] (0.68s)  My name is Horeoda.
+[15:07:40] (0.63s)  This is an offline STT system.
+[15:07:44] (0.65s)  It works in both English and O2.
+[15:07:55] (0.66s)  Today, this is a demonstration with visual proof of the...
+
+========================================
+Ended   : 2026-03-10 15:08:09
+Duration: 47.9s
+Entries : 5
