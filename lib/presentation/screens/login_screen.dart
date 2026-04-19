@@ -252,7 +252,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                               final auth = Provider.of<AuthProvider>(context, listen: false);
                               await auth.signInWithGoogle();
                               if (auth.currentUser != null && mounted) {
-                                Navigator.pushReplacementNamed(context, '/home');
+                                // Updated: Navigation to Signup for Figma flow
+                                Navigator.pushReplacement(
+                                  context, 
+                                  MaterialPageRoute(builder: (context) => const SignupScreen())
+                                );
                               }
                             },
                           ),
@@ -264,7 +268,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                               final auth = Provider.of<AuthProvider>(context, listen: false);
                               await auth.signInWithFacebook();
                               if (auth.currentUser != null && mounted) {
-                                Navigator.pushReplacementNamed(context, '/home');
+                                // Updated: Navigation to Signup for Figma flow
+                                Navigator.pushReplacement(
+                                  context, 
+                                  MaterialPageRoute(builder: (context) => const SignupScreen())
+                                );
                               }
                             },
                           ),
@@ -447,9 +455,10 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     );
 
     if (success && mounted) {
+      // Updated: Changed from MainScreen to SignupScreen to follow Figma flow
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainScreen()),
+        MaterialPageRoute(builder: (context) => const SignupScreen()),
       );
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
