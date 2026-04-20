@@ -1,13 +1,33 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:echosee/presentation/screens/login_screen.dart'; // Is path ko check kar lein agar error aaye
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // 3 seconds baad Login Screen par khud hi chala jayega
+    Timer(const Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          // Aik premium dark gradient background
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -20,7 +40,7 @@ class SplashScreen extends StatelessWidget {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
               child: Container(
-                height: 250,
+                height: 280, // Height thori barha di hai naam ke liye
                 width: 250,
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.1),
@@ -33,16 +53,32 @@ class SplashScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Agar logo nahi hai to icon use kar lein
-                    Icon(Icons.auto_awesome, size: 80, color: Colors.white),
-                    SizedBox(height: 20),
-                    Text(
+                    const Icon(Icons.auto_awesome, size: 80, color: Colors.white),
+                    const SizedBox(height: 20),
+                    const Text(
                       "ECHOSEE",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 4,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    // Aapka naam yahan add kar diya hai
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Text(
+                        "Developed by Areeba Ghafoor",
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ],
