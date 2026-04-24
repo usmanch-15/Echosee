@@ -1,25 +1,24 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-// ✅ Supabase import
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'providers/app_theme_provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/transcript_provider.dart';
 import 'core/utils/navigation_service.dart';
-import 'presentation/screens/ai_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ✅ Supabase initialize
-  await Supabase.initialize(
-    url: 'https://bzsqhbyotxouppzwyift.supabase.co', // tumhara Project URL
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6c3FoYnlvdHhvdXBwend5aWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA2NTg0MDgsImV4cCI6MjA4NjIzNDQwOH0.XPzxS7isEC3jIRw58XfNVvr2qrtyw8F1E68y5D0OG7o',
-  );
+  try {
+    await Supabase.initialize(
+      url: 'https://bzsqhbyotxouppzwyift.supabase.co',
+      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6c3FoYnlvdHhvdXBwend5aWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA2NTg0MDgsImV4cCI6MjA4NjIzNDQwOH0.XPzxS7isEC3jIRw58XfNVvr2qrtyw8F1E68y5D0OG7o',
+    );
+    debugPrint('✅ Supabase initialized successfully');
+  } catch (e) {
+    debugPrint('❌ Supabase initialization error: $e');
+  }
 
   runApp(const MyApp());
 }

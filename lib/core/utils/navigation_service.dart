@@ -1,6 +1,7 @@
 // lib/core/utils/navigation_service.dart
 import 'package:echo_see_companion/presentation/screens/ai_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as material;
 
 import '../../presentation/screens/login_screen.dart';
 import '../../presentation/screens/main_screen.dart';
@@ -9,8 +10,8 @@ import '../../presentation/screens/profile_screen.dart';
 import '../../presentation/screens/settings_screen.dart';
 import '../../presentation/screens/signup_screen.dart';
 import '../../presentation/screens/splash_screen.dart';
-import '../../presentation/screens/transcript_list_screen.dart';
 import '../../presentation/screens/reset_password_screen.dart';
+import '../../presentation/screens/transcript_list_screen.dart';
 
 class NavigationService {
   static final GlobalKey<NavigatorState> navigatorKey =
@@ -48,11 +49,13 @@ class NavigationService {
   }
 
   static void goBack({dynamic result}) {
-    navigatorKey.currentState!.pop(result);
+    if (navigatorKey.currentState?.canPop() ?? false) {
+      navigatorKey.currentState!.pop(result);
+    }
   }
 
   static void goBackToFirst() {
-    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    navigatorKey.currentState?.popUntil((route) => route.isFirst);
   }
 
   static bool canPop() {
@@ -107,34 +110,41 @@ class NavigationService {
     }
   }
 
-  static Future<dynamic> showDialog({
+  static Future<T?> showCustomDialog<T>({
     required WidgetBuilder builder,
     bool barrierDismissible = true,
-    required BuildContext context,
   }) {
-    return showDialog(
-      context: navigatorKey.currentContext!,
-      builder: builder,
-      barrierDismissible: barrierDismissible,
-    );
+    final context = navigatorKey.currentContext;
+    if (context != null) {
+      return material.showDialog<T>(
+        context: context,
+        builder: builder,
+        barrierDismissible: barrierDismissible,
+      );
+    }
+    return Future.value(null);
   }
 
-  static Future<dynamic> showBottomSheet({
+  static Future<T?> showCustomBottomSheet<T>({
     required WidgetBuilder builder,
     Color? backgroundColor,
     double? elevation,
     ShapeBorder? shape,
     Clip? clipBehavior,
   }) {
-    return showModalBottomSheet(
-      context: navigatorKey.currentContext!,
-      builder: builder,
-      backgroundColor: backgroundColor,
-      elevation: elevation,
-      shape: shape,
-      clipBehavior: clipBehavior,
-      isScrollControlled: true,
-    );
+    final context = navigatorKey.currentContext;
+    if (context != null) {
+      return showModalBottomSheet<T>(
+        context: context,
+        builder: builder,
+        backgroundColor: backgroundColor,
+        elevation: elevation,
+        shape: shape,
+        clipBehavior: clipBehavior,
+        isScrollControlled: true,
+      );
+    }
+    return Future.value(null);
   }
 }
 

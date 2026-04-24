@@ -24,13 +24,22 @@ void main() {
 
     when(() => mockAuth.isPremium).thenReturn(false);
     when(() => mockAuth.isLoading).thenReturn(false);
+    when(() => mockAuth.isAuthenticated).thenReturn(false);
+    when(() => mockAuth.currentUser).thenReturn(null);
+    when(() => mockAuth.error).thenReturn(null);
+
     when(() => mockTheme.fontSize).thenReturn(16.0);
     when(() => mockTheme.isDarkTheme).thenReturn(false);
-    
-    // Stub TranscriptProvider methods
-    when(() => mockTranscript.loadTranscripts(limit: any(named: 'limit'))).thenAnswer((_) async => {});
+    when(() => mockTheme.showSpeakerSettings).thenReturn(true);
+    when(() => mockTheme.numberOfSpeakers).thenReturn(2);
+    when(() => mockTheme.notificationsEnabled).thenReturn(true);
+    when(() => mockTheme.autoSave).thenReturn(true);
+
+    when(() => mockTranscript.loadTranscripts(limit: any(named: 'limit')))
+        .thenAnswer((_) async {});
     when(() => mockTranscript.transcripts).thenReturn([]);
     when(() => mockTranscript.isLoading).thenReturn(false);
+    when(() => mockTranscript.error).thenReturn(null);
     
     // Default theme data for Provider
     when(() => mockTheme.themeData).thenReturn(ThemeData.light());

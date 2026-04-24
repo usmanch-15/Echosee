@@ -21,24 +21,7 @@ subprojects {
 }
 
 subprojects {
-    plugins.whenPluginAdded {
-        if (this.javaClass.name.contains("com.android.build.gradle.LibraryPlugin") || 
-            this.javaClass.name.contains("com.android.build.gradle.AppPlugin")) {
-            val androidMetadata = project.extensions.findByName("android")
-            if (androidMetadata != null) {
-                try {
-                    val namespaceMethod = androidMetadata.javaClass.getMethod("getNamespace")
-                    val currentNamespace = namespaceMethod.invoke(androidMetadata)
-                    if (currentNamespace == null) {
-                        val setNamespace = androidMetadata.javaClass.getMethod("setNamespace", String::class.java)
-                        setNamespace.invoke(androidMetadata, "com.echosee.dependency.${project.name.replace(":", ".").replace("-", ".")}")
-                    }
-                } catch (e: Exception) {
-                    // Ignore if method not found
-                }
-            }
-        }
-    }
+    apply(plugin = "kotlin-android")
 }
 
 tasks.register<Delete>("clean") {

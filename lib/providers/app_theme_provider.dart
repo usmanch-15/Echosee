@@ -6,12 +6,12 @@ import 'package:echo_see_companion/data/models/user_settings_model.dart';
 import 'package:echo_see_companion/data/repositories/settings_repository.dart';
 
 class AppThemeProvider extends ChangeNotifier {
-  static const String FONT_SIZE_KEY = 'font_size';
-  static const String DARK_THEME_KEY = 'dark_theme';
-  static const String SHOW_SPEAKER_KEY = 'show_speaker';
-  static const String SPEAKER_COUNT_KEY = 'speaker_count';
-  static const String NOTIFICATIONS_KEY = 'notifications_enabled';
-  static const String AUTO_SAVE_KEY = 'auto_save';
+  static const String fontSizeKey = 'font_size';
+  static const String darkThemeKey = 'dark_theme';
+  static const String showSpeakerKey = 'show_speaker';
+  static const String speakerCountKey = 'speaker_count';
+  static const String notificationsKey = 'notifications_enabled';
+  static const String autoSaveKey = 'auto_save';
 
   // Settings state with defaults
   double _fontSize = 16.0;
@@ -50,12 +50,12 @@ class AppThemeProvider extends ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
 
-      _fontSize = prefs.getDouble(FONT_SIZE_KEY) ?? 16.0;
-      _isDarkTheme = prefs.getBool(DARK_THEME_KEY) ?? false;
-      _showSpeakerSettings = prefs.getBool(SHOW_SPEAKER_KEY) ?? true;
-      _numberOfSpeakers = prefs.getInt(SPEAKER_COUNT_KEY) ?? 2;
-      _notificationsEnabled = prefs.getBool(NOTIFICATIONS_KEY) ?? true;
-      _autoSave = prefs.getBool(AUTO_SAVE_KEY) ?? true;
+      _fontSize = prefs.getDouble(fontSizeKey) ?? 16.0;
+      _isDarkTheme = prefs.getBool(darkThemeKey) ?? false;
+      _showSpeakerSettings = prefs.getBool(showSpeakerKey) ?? true;
+      _numberOfSpeakers = prefs.getInt(speakerCountKey) ?? 2;
+      _notificationsEnabled = prefs.getBool(notificationsKey) ?? true;
+      _autoSave = prefs.getBool(autoSaveKey) ?? true;
 
       notifyListeners();
 
@@ -78,18 +78,18 @@ class AppThemeProvider extends ChangeNotifier {
         }
       }
     } catch (e) {
-      print('Error loading preferences: $e');
+      debugPrint('Error loading preferences: $e');
     }
   }
 
   Future<void> _saveLocalPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble(FONT_SIZE_KEY, _fontSize);
-    await prefs.setBool(DARK_THEME_KEY, _isDarkTheme);
-    await prefs.setBool(SHOW_SPEAKER_KEY, _showSpeakerSettings);
-    await prefs.setInt(SPEAKER_COUNT_KEY, _numberOfSpeakers);
-    await prefs.setBool(NOTIFICATIONS_KEY, _notificationsEnabled);
-    await prefs.setBool(AUTO_SAVE_KEY, _autoSave);
+    await prefs.setDouble(fontSizeKey, _fontSize);
+    await prefs.setBool(darkThemeKey, _isDarkTheme);
+    await prefs.setBool(showSpeakerKey, _showSpeakerSettings);
+    await prefs.setInt(speakerCountKey, _numberOfSpeakers);
+    await prefs.setBool(notificationsKey, _notificationsEnabled);
+    await prefs.setBool(autoSaveKey, _autoSave);
   }
 
   // Save preferences to storage
@@ -114,7 +114,7 @@ class AppThemeProvider extends ChangeNotifier {
         await _settingsRepository.saveSettings(settings);
       }
     } catch (e) {
-      print('Error saving preferences: $e');
+      debugPrint('Error saving preferences: $e');
     }
   }
 
@@ -155,16 +155,16 @@ class AppThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void resetToDefaults() async {
+  Future<void> resetToDefaults() async {
     try {
       final prefs = await SharedPreferences.getInstance();
 
-      await prefs.remove(FONT_SIZE_KEY);
-      await prefs.remove(DARK_THEME_KEY);
-      await prefs.remove(SHOW_SPEAKER_KEY);
-      await prefs.remove(SPEAKER_COUNT_KEY);
-      await prefs.remove(NOTIFICATIONS_KEY);
-      await prefs.remove(AUTO_SAVE_KEY);
+      await prefs.remove(fontSizeKey);
+      await prefs.remove(darkThemeKey);
+      await prefs.remove(showSpeakerKey);
+      await prefs.remove(speakerCountKey);
+      await prefs.remove(notificationsKey);
+      await prefs.remove(autoSaveKey);
 
       _fontSize = 16.0;
       _isDarkTheme = false;
@@ -176,7 +176,7 @@ class AppThemeProvider extends ChangeNotifier {
       _savePreferences(); // Also syncs to cloud if online
       notifyListeners();
     } catch (e) {
-      print('Error resetting preferences: $e');
+      debugPrint('Error resetting preferences: $e');
     }
   }
 
