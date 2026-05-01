@@ -1,7 +1,7 @@
 // lib/presentation/widgets/common/custom_textfield.dart
 import 'package:flutter/material.dart';
-import 'package:echo_see_companion/core/constants/app_colors.dart';
-import 'package:echo_see_companion/core/constants/app_styles.dart';
+import 'package:echosee/core/constants/app_colors.dart';
+import 'package:echosee/core/constants/app_styles.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;

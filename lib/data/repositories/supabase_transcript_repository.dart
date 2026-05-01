@@ -1,9 +1,9 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:echo_see_companion/data/models/transcript_model.dart';
-import 'package:echo_see_companion/data/repositories/transcript_repository.dart';
+import 'package:echosee/data/models/transcript_model.dart';
+import 'package:echosee/data/repositories/transcript_repository.dart';
 
 class SupabaseTranscriptRepository implements TranscriptRepository {
-  final _client = Supabase.instance.client;
+  SupabaseClient get _client => Supabase.instance.client;
   static const int _maxFreeTranscripts = 5;
 
   Future<bool> _isUserPremium() async {

@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:echo_see_companion/data/models/user_settings_model.dart';
-import 'package:echo_see_companion/data/repositories/settings_repository.dart';
+import 'package:echosee/data/models/user_settings_model.dart';
+import 'package:echosee/data/repositories/settings_repository.dart';
 
 class AppThemeProvider extends ChangeNotifier {
   static const String fontSizeKey = 'font_size';
@@ -12,6 +12,7 @@ class AppThemeProvider extends ChangeNotifier {
   static const String speakerCountKey = 'speaker_count';
   static const String notificationsKey = 'notifications_enabled';
   static const String autoSaveKey = 'auto_save';
+  static const String languageKey = 'language';
 
   // Settings state with defaults
   double _fontSize = 16.0;
@@ -20,9 +21,10 @@ class AppThemeProvider extends ChangeNotifier {
   int _numberOfSpeakers = 2;
   bool _notificationsEnabled = true;
   bool _autoSave = true;
+  String _language = 'EN'; // Default to English
 
   final SettingsRepository _settingsRepository = SettingsRepository();
-  final _supabase = Supabase.instance.client;
+  SupabaseClient get _supabase => Supabase.instance.client;
 
   AppThemeProvider() {
     _loadPreferences();
@@ -45,6 +47,7 @@ class AppThemeProvider extends ChangeNotifier {
   int get numberOfSpeakers => _numberOfSpeakers;
   bool get notificationsEnabled => _notificationsEnabled;
   bool get autoSave => _autoSave;
+  String get language => _language;
 
   // Load preferences from storage
   Future<void> _loadPreferences() async {
@@ -56,6 +59,7 @@ class AppThemeProvider extends ChangeNotifier {
       _showSpeakerSettings = prefs.getBool(showSpeakerKey) ?? true;
       _numberOfSpeakers = prefs.getInt(speakerCountKey) ?? 2;
       _notificationsEnabled = prefs.getBool(notificationsKey) ?? true;
+      _language = prefs.getString(languageKey) ?? 'EN';
       _autoSave = prefs.getBool(autoSaveKey) ?? true;
 
       notifyListeners();
@@ -92,6 +96,7 @@ class AppThemeProvider extends ChangeNotifier {
     await prefs.setBool(darkThemeKey, _isDarkTheme);
     await prefs.setBool(showSpeakerKey, _showSpeakerSettings);
     await prefs.setInt(speakerCountKey, _numberOfSpeakers);
+    await prefs.setString(languageKey, _language);
     await prefs.setBool(notificationsKey, _notificationsEnabled);
     await prefs.setBool(autoSaveKey, _autoSave);
   }
@@ -159,6 +164,12 @@ class AppThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setLanguage(String languageCode) {
+    _language = languageCode;
+    _savePreferences();
+    notifyListeners();
+  }
+
   Future<void> resetToDefaults() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -176,6 +187,7 @@ class AppThemeProvider extends ChangeNotifier {
       _numberOfSpeakers = 2;
       _notificationsEnabled = true;
       _autoSave = true;
+      _language = 'EN';
 
       _savePreferences(); // Also syncs to cloud if online
       notifyListeners();

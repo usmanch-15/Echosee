@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:echo_see_companion/data/models/transcript_model.dart';
-import 'package:echo_see_companion/data/repositories/transcript_repository.dart';
-import 'package:echo_see_companion/data/repositories/supabase_transcript_repository.dart';
-import 'package:echo_see_companion/data/repositories/translation_repository.dart';
+import 'package:echosee/data/models/transcript_model.dart';
+import 'package:echosee/data/repositories/transcript_repository.dart';
+import 'package:echosee/data/repositories/supabase_transcript_repository.dart';
+import 'package:echosee/data/repositories/translation_repository.dart';
 
 class TranscriptProvider with ChangeNotifier {
   final TranscriptRepository _repository;

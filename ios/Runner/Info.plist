@@ -46,12 +46,12 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>EcoC uses Bluetooth to connect with your smart glasses.</string>
+	<string>Echosee uses Bluetooth to connect with your smart glasses.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>EcoC uses Bluetooth to connect with your smart glasses.</string>
+	<string>Echosee uses Bluetooth to connect with your smart glasses.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>EcoC uses audio input for real-time speech-to-text transcription.</string>
+	<string>Echosee uses audio input for real-time speech-to-text transcription.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>EcoC converts speech into real-time readable text.</string>
+	<string>Echosee converts speech into real-time readable text.</string>
 </dict>
 </plist>

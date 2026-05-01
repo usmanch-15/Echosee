@@ -2,12 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:echo_see_companion/core/constants/app_colors.dart';
-import 'package:echo_see_companion/providers/transcript_provider.dart';
-import 'package:echo_see_companion/providers/auth_provider.dart';
-import 'package:echo_see_companion/data/models/transcript_model.dart';
-import 'package:echo_see_companion/providers/app_theme_provider.dart';
-import 'package:echo_see_companion/presentation/screens/premium_features_screen.dart';
+import 'package:echosee/core/constants/app_colors.dart';
+import 'package:echosee/providers/transcript_provider.dart';
+import 'package:echosee/providers/auth_provider.dart';
+import 'package:echosee/data/models/transcript_model.dart';
+import 'package:echosee/providers/app_theme_provider.dart';
+import 'package:echosee/presentation/screens/premium_features_screen.dart';
 
 class HistoryScreen extends StatefulWidget {
   final String? selectedTranscriptId;

@@ -1,6 +1,6 @@
 // lib/presentation/screens/payment_screen.dart
 import 'package:flutter/material.dart';
-import 'package:echo_see_companion/core/constants/app_colors.dart';
+import 'package:echosee/core/constants/app_colors.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});

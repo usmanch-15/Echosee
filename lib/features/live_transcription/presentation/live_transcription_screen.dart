@@ -15,7 +15,7 @@ class LiveTranscriptionScreen extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: const Text(
-              'EcoC Live',
+              'Echosee Live',
               style: TextStyle(fontWeight: FontWeight.w700),
             ),
           ),

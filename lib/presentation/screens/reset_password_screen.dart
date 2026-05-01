@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:echo_see_companion/core/constants/app_colors.dart';
+import 'package:echosee/core/constants/app_colors.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ResetPasswordScreen extends StatefulWidget {

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:provider/provider.dart';
-import 'package:echo_see_companion/core/constants/app_colors.dart';
-import 'package:echo_see_companion/presentation/screens/settings_screen.dart';
-import 'package:echo_see_companion/presentation/screens/history_screen.dart';
-import 'package:echo_see_companion/presentation/screens/profile_screen.dart';
-import 'package:echo_see_companion/presentation/screens/features_screen.dart';
-import 'package:echo_see_companion/providers/transcript_provider.dart';
-import 'package:echo_see_companion/providers/app_theme_provider.dart';
-import 'package:echo_see_companion/data/models/transcript_model.dart';
-import 'package:echo_see_companion/services/speech_service.dart';
+import 'package:echosee/core/constants/app_colors.dart';
+import 'package:echosee/presentation/screens/settings_screen.dart';
+import 'package:echosee/presentation/screens/history_screen.dart';
+import 'package:echosee/presentation/screens/profile_screen.dart';
+import 'package:echosee/presentation/screens/features_screen.dart';
+import 'package:echosee/providers/transcript_provider.dart';
+import 'package:echosee/providers/app_theme_provider.dart';
+import 'package:echosee/data/models/transcript_model.dart';
+import 'package:echosee/services/speech_service.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:echo_see_companion/core/constants/app_colors.dart';
-import 'package:echo_see_companion/providers/auth_provider.dart';
+import 'package:echosee/core/constants/app_colors.dart';
+import 'package:echosee/providers/auth_provider.dart';
 
 class PremiumFeaturesScreen extends StatelessWidget {
   const PremiumFeaturesScreen({super.key});

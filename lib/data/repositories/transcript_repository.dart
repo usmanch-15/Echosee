@@ -1,6 +1,6 @@
 // lib/data/repositories/transcript_repository.dart
 import 'dart:async';
-import 'package:echo_see_companion/data/models/transcript_model.dart';
+import 'package:echosee/data/models/transcript_model.dart';
 
 abstract class TranscriptRepository {
   Future<List<Transcript>> getTranscripts({

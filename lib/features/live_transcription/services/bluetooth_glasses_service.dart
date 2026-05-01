@@ -18,7 +18,7 @@ enum GlassesConnectionState {
 }
 
 class BluetoothGlassesService {
-  static const String _knownDeviceIdKey = 'ecoc_known_glasses_device_id';
+  static const String _knownDeviceIdKey = 'echosee_known_glasses_device_id';
 
   final StreamController<List<ScanResult>> _scanResultsController =
       StreamController<List<ScanResult>>.broadcast();

@@ -1,8 +1,8 @@
 // lib/presentation/screens/transcript_detail_screen.dart
 import 'package:flutter/material.dart';
-import 'package:echo_see_companion/core/constants/app_colors.dart';
-import 'package:echo_see_companion/core/constants/app_styles.dart';
-import 'package:echo_see_companion/data/models/transcript_model.dart';
+import 'package:echosee/core/constants/app_colors.dart';
+import 'package:echosee/core/constants/app_styles.dart';
+import 'package:echosee/data/models/transcript_model.dart';
 
 class TranscriptDetailScreen extends StatefulWidget {
   final Transcript transcript;

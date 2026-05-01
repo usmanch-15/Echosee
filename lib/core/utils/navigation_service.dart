@@ -1,5 +1,5 @@
 // lib/core/utils/navigation_service.dart
-import 'package:echo_see_companion/presentation/screens/ai_screen.dart';
+import 'package:echosee/presentation/screens/ai_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../presentation/screens/login_screen.dart';

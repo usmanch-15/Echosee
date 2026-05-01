@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:echo_see_companion/services/yamnet_service.dart';
+import 'package:echosee/services/yamnet_service.dart';
 
 class SoundRecognitionScreen extends StatefulWidget {
   const SoundRecognitionScreen({super.key});

@@ -1,7 +1,7 @@
 // lib/presentation/screens/settings_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:echo_see_companion/core/constants/app_colors.dart';
+import 'package:echosee/core/constants/app_colors.dart';
 import '../../providers/app_theme_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -355,7 +355,63 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ],
               ),
             ),
+            const SizedBox(height: 24),
 
+            // Language Settings
+            _buildSettingSection(
+              themeProvider: themeProvider,
+              title: 'Language',
+              icon: Icons.language,
+              child: Column(
+                children: [
+                  Text(
+                    'Select Your Language',
+                    style: TextStyle(
+                      fontSize: themeProvider.fontSize,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildLanguageOption(
+                          label: 'English',
+                          code: 'EN',
+                          isSelected: themeProvider.language == 'EN',
+                          onTap: () => themeProvider.setLanguage('EN'),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _buildLanguageOption(
+                          label: 'اردو',
+                          code: 'UR',
+                          isSelected: themeProvider.language == 'UR',
+                          onTap: () => themeProvider.setLanguage('UR'),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: themeProvider.isDarkTheme ? Colors.grey[800] : Colors.grey[100],
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: themeProvider.isDarkTheme ? Colors.grey[700]! : Colors.grey[300]!,
+                      ),
+                    ),
+                    child: Text(
+                      'Currently using: ${themeProvider.language == "EN" ? "English" : "اردو (Urdu)"}',
+                      style: TextStyle(fontSize: themeProvider.fontSize - 2),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 32),
 
             // Save Preferences Button
@@ -542,6 +598,48 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (size <= 16) return 'Medium';
     if (size <= 18) return 'Large';
     return 'Extra Large';
+  }
+
+  Widget _buildLanguageOption({
+    required String label,
+    required String code,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? AppColors.primary : Colors.grey[300]!,
+            width: 1.5,
+          ),
+        ),
+        child: Column(
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: isSelected ? Colors.white : Colors.grey[700],
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              code,
+              style: TextStyle(
+                fontSize: 12,
+                color: isSelected ? Colors.white70 : Colors.grey[500],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _savePreferences(BuildContext context) {

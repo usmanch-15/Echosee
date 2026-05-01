@@ -1,9 +1,9 @@
 // lib/data/repositories/settings_repository.dart
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:echo_see_companion/data/models/user_settings_model.dart';
+import 'package:echosee/data/models/user_settings_model.dart';
 
 class SettingsRepository {
-  final _client = Supabase.instance.client;
+  SupabaseClient get _client => Supabase.instance.client;
 
   Future<UserSettings?> getSettings(String userId) async {
     try {
