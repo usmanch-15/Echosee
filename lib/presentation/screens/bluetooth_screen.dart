@@ -19,11 +19,16 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   }
 
   void _startScan() {
+    // Scanning start karna
     FlutterBluePlus.startScan(timeout: const Duration(seconds: 5));
+    
+    // Results ko listen karna aur list update karna
     FlutterBluePlus.scanResults.listen((results) {
-      setState(() {
-        scanResults = results;
-      });
+      if (mounted) {
+        setState(() {
+          scanResults = results;
+        });
+      }
     });
   }
 
@@ -53,7 +58,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
           Expanded(
             child: ListView.builder(
               itemCount: scanResults.length,
-              itemFactory: (context, index) {
+              itemBuilder: (context, index) { // Yahan 'itemFactory' ko 'itemBuilder' kar diya hai
                 final data = scanResults[index];
                 return Card(
                   margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -64,10 +69,20 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     subtitle: Text(data.device.remoteId.toString()),
                     trailing: ElevatedButton(
                       onPressed: () async {
-                        await data.device.connect();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Connected to ${data.device.platformName}")),
-                        );
+                        try {
+                          await data.device.connect();
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Connected to ${data.device.platformName}")),
+                            );
+                          }
+                        } catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Connection failed: $e")),
+                            );
+                          }
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
@@ -91,7 +106,10 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                   backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
-                child: const Text("Rescan Devices", style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
+                child: const Text(
+                  "Rescan Devices", 
+                  style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)
+                ),
               ),
             ),
           ),
