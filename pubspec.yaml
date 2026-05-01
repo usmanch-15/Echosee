@@ -1,80 +1,24 @@
-# pubspec.yaml
-name: echo_see_companion
-description: EchoSee Smart Glasses Companion App
-publish_to: 'none'
+name: ecoc
+description: EcoC speech-to-text companion for Bluetooth smart glasses
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  
-  # State Management
-  provider: ^6.0.5
-  supabase_flutter: ^2.5.6
-  google_sign_in: ^6.2.1
-  # Animations
-  lottie: ^2.7.0
-  animated_text_kit: ^4.2.2
-  
-  # UI Components
-  flutter_svg: ^2.0.9
-  flutter_animate: ^4.1.2
-  shimmer: ^3.0.0
-  
-  # Storage
-  sqflite: ^2.3.0
-  shared_preferences: ^2.2.2
-
-  
-  # Utilities
-  intl: ^0.18.1
-  uuid: ^4.4.0
-  path_provider: ^2.1.0
-  url_launcher: ^6.2.0
-  
-  # Audio/Speech
-  # vosk_flutter: ^0.3.0  # Temporarily disabled due to AGP 8.9.1 compatibility issues
+  provider: ^6.1.2
+  flutter_blue_plus: ^2.2.1
   speech_to_text: ^7.3.0
-  audio_session: ^0.1.11
-  just_audio: ^0.9.35
-  
-  # Charts & Graphs
-  fl_chart: ^0.66.0
-
-  # AI & Machine Learning
-  tflite_flutter: ^0.12.0
-  google_mlkit_face_detection: ^0.11.0
-  
-  # Hardware & Permissions
-  camera: ^0.11.0+2
   permission_handler: ^11.3.1
-  sound_stream: ^0.4.2
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
-  mocktail: ^1.0.4
-  build_runner: ^2.4.0
-  flutter_launcher_icons: ^0.13.1
-  integration_test:
-    sdk: flutter
 
-dependency_overrides:
-  permission_handler: ^11.3.1
-
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/app_icon.png"
-  min_sdk_android: 21
 flutter:
   uses-material-design: true
-  assets:
-    - assets/models/en.zip
-    - assets/templates/
-    - assets/app_icon.png
-

@@ -27,3 +27,12 @@ subprojects {
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
+
+// Force all Kotlin compilation to use JVM 17
+afterEvaluate {
+    rootProject.allprojects {
+        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+            kotlinOptions.jvmTarget = "17"
+        }
+    }
+}

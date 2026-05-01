@@ -31,7 +31,8 @@ class AppThemeProvider extends ChangeNotifier {
 
   void _listenToAuthChanges() {
     _supabase.auth.onAuthStateChange.listen((data) {
-      if (data.event == AuthChangeEvent.signedIn || data.event == AuthChangeEvent.signedOut) {
+      if (data.event == AuthChangeEvent.signedIn ||
+          data.event == AuthChangeEvent.signedOut) {
         _loadPreferences();
       }
     });
@@ -67,11 +68,14 @@ class AppThemeProvider extends ChangeNotifier {
           _isDarkTheme = cloudSettings.theme == 'dark';
           _notificationsEnabled = cloudSettings.notificationsEnabled;
           _autoSave = cloudSettings.autoSave;
-          
-          _fontSize = (cloudSettings.preferences['font_size'] ?? _fontSize).toDouble();
-          _showSpeakerSettings = cloudSettings.preferences['show_speaker'] ?? _showSpeakerSettings;
-          _numberOfSpeakers = cloudSettings.preferences['speaker_count'] ?? _numberOfSpeakers;
-          
+
+          _fontSize =
+              (cloudSettings.preferences['font_size'] ?? _fontSize).toDouble();
+          _showSpeakerSettings =
+              cloudSettings.preferences['show_speaker'] ?? _showSpeakerSettings;
+          _numberOfSpeakers =
+              cloudSettings.preferences['speaker_count'] ?? _numberOfSpeakers;
+
           // Save back to local to keep in sync
           await _saveLocalPreferences();
           notifyListeners();
@@ -184,94 +188,111 @@ class AppThemeProvider extends ChangeNotifier {
   ThemeData get themeData => isDarkTheme ? darkThemeData : lightThemeData;
 
   ThemeData get lightThemeData => ThemeData(
-    brightness: Brightness.light,
-    primaryColor: Colors.blue,
-    primarySwatch: Colors.blue,
-    fontFamily: 'Roboto',
-    scaffoldBackgroundColor: Colors.grey[50],
-    appBarTheme: AppBarTheme(
-      backgroundColor: Colors.blue,
-      elevation: 4,
-      titleTextStyle: TextStyle(
-        fontSize: _fontSize + 4,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      ),
-    ),
-    textTheme: TextTheme(
-      displayLarge: TextStyle(fontSize: _fontSize + 12, fontWeight: FontWeight.bold),
-      displayMedium: TextStyle(fontSize: _fontSize + 10, fontWeight: FontWeight.bold),
-      displaySmall: TextStyle(fontSize: _fontSize + 8, fontWeight: FontWeight.bold),
-      headlineMedium: TextStyle(fontSize: _fontSize + 6, fontWeight: FontWeight.bold),
-      headlineSmall: TextStyle(fontSize: _fontSize + 4, fontWeight: FontWeight.bold),
-      titleLarge: TextStyle(fontSize: _fontSize + 2, fontWeight: FontWeight.bold),
-      titleMedium: TextStyle(fontSize: _fontSize + 1, fontWeight: FontWeight.w500),
-      titleSmall: TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w500),
-      bodyLarge: TextStyle(fontSize: _fontSize),
-      bodyMedium: TextStyle(fontSize: _fontSize - 1),
-      bodySmall: TextStyle(fontSize: _fontSize - 2),
-      labelLarge: TextStyle(fontSize: _fontSize),
-      labelSmall: TextStyle(fontSize: _fontSize - 3),
-    ),
-    buttonTheme: ButtonThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+        brightness: Brightness.light,
+        primaryColor: Colors.blue,
+        primarySwatch: Colors.blue,
+        fontFamily: 'Roboto',
+        scaffoldBackgroundColor: Colors.grey[50],
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.blue,
+          elevation: 4,
+          titleTextStyle: TextStyle(
+            fontSize: _fontSize + 4,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      ),
-    ),
-  );
+        textTheme: TextTheme(
+          displayLarge:
+              TextStyle(fontSize: _fontSize + 12, fontWeight: FontWeight.bold),
+          displayMedium:
+              TextStyle(fontSize: _fontSize + 10, fontWeight: FontWeight.bold),
+          displaySmall:
+              TextStyle(fontSize: _fontSize + 8, fontWeight: FontWeight.bold),
+          headlineMedium:
+              TextStyle(fontSize: _fontSize + 6, fontWeight: FontWeight.bold),
+          headlineSmall:
+              TextStyle(fontSize: _fontSize + 4, fontWeight: FontWeight.bold),
+          titleLarge:
+              TextStyle(fontSize: _fontSize + 2, fontWeight: FontWeight.bold),
+          titleMedium:
+              TextStyle(fontSize: _fontSize + 1, fontWeight: FontWeight.w500),
+          titleSmall:
+              TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w500),
+          bodyLarge: TextStyle(fontSize: _fontSize),
+          bodyMedium: TextStyle(fontSize: _fontSize - 1),
+          bodySmall: TextStyle(fontSize: _fontSize - 2),
+          labelLarge: TextStyle(fontSize: _fontSize),
+          labelSmall: TextStyle(fontSize: _fontSize - 3),
+        ),
+        buttonTheme: ButtonThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          ),
+        ),
+      );
 
   ThemeData get darkThemeData => ThemeData(
-    brightness: Brightness.dark,
-    primaryColor: Colors.blue,
-    primarySwatch: Colors.blue,
-    fontFamily: 'Roboto',
-    scaffoldBackgroundColor: Colors.grey[900],
-    appBarTheme: AppBarTheme(
-      backgroundColor: Colors.grey[900],
-      elevation: 4,
-      titleTextStyle: TextStyle(
-        fontSize: _fontSize + 4,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      ),
-    ),
-    textTheme: TextTheme(
-      displayLarge: TextStyle(fontSize: _fontSize + 12, fontWeight: FontWeight.bold),
-      displayMedium: TextStyle(fontSize: _fontSize + 10, fontWeight: FontWeight.bold),
-      displaySmall: TextStyle(fontSize: _fontSize + 8, fontWeight: FontWeight.bold),
-      headlineMedium: TextStyle(fontSize: _fontSize + 6, fontWeight: FontWeight.bold),
-      headlineSmall: TextStyle(fontSize: _fontSize + 4, fontWeight: FontWeight.bold),
-      titleLarge: TextStyle(fontSize: _fontSize + 2, fontWeight: FontWeight.bold),
-      titleMedium: TextStyle(fontSize: _fontSize + 1, fontWeight: FontWeight.w500),
-      titleSmall: TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w500),
-      bodyLarge: TextStyle(fontSize: _fontSize),
-      bodyMedium: TextStyle(fontSize: _fontSize - 1),
-      bodySmall: TextStyle(fontSize: _fontSize - 2),
-      labelLarge: TextStyle(fontSize: _fontSize),
-      labelSmall: TextStyle(fontSize: _fontSize - 3),
-    ),
-    buttonTheme: ButtonThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+        brightness: Brightness.dark,
+        primaryColor: Colors.blue,
+        primarySwatch: Colors.blue,
+        fontFamily: 'Roboto',
+        scaffoldBackgroundColor: Colors.grey[900],
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.grey[900],
+          elevation: 4,
+          titleTextStyle: TextStyle(
+            fontSize: _fontSize + 4,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        backgroundColor: Colors.blue,
-      ),
-    ),
-    dividerColor: Colors.grey[700], dialogTheme: DialogThemeData(backgroundColor: Colors.grey[800]),
-  );
+        textTheme: TextTheme(
+          displayLarge:
+              TextStyle(fontSize: _fontSize + 12, fontWeight: FontWeight.bold),
+          displayMedium:
+              TextStyle(fontSize: _fontSize + 10, fontWeight: FontWeight.bold),
+          displaySmall:
+              TextStyle(fontSize: _fontSize + 8, fontWeight: FontWeight.bold),
+          headlineMedium:
+              TextStyle(fontSize: _fontSize + 6, fontWeight: FontWeight.bold),
+          headlineSmall:
+              TextStyle(fontSize: _fontSize + 4, fontWeight: FontWeight.bold),
+          titleLarge:
+              TextStyle(fontSize: _fontSize + 2, fontWeight: FontWeight.bold),
+          titleMedium:
+              TextStyle(fontSize: _fontSize + 1, fontWeight: FontWeight.w500),
+          titleSmall:
+              TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w500),
+          bodyLarge: TextStyle(fontSize: _fontSize),
+          bodyMedium: TextStyle(fontSize: _fontSize - 1),
+          bodySmall: TextStyle(fontSize: _fontSize - 2),
+          labelLarge: TextStyle(fontSize: _fontSize),
+          labelSmall: TextStyle(fontSize: _fontSize - 3),
+        ),
+        buttonTheme: ButtonThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            backgroundColor: Colors.blue,
+          ),
+        ),
+        dividerColor: Colors.grey[700],
+        dialogTheme: DialogThemeData(backgroundColor: Colors.grey[800]),
+      );
 }

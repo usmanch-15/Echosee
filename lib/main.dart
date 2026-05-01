@@ -1,53 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'providers/app_theme_provider.dart';
-import 'providers/auth_provider.dart';
-import 'providers/transcript_provider.dart';
-import 'core/utils/navigation_service.dart';
+import 'features/live_transcription/controllers/live_transcription_controller.dart';
+import 'features/live_transcription/presentation/live_transcription_screen.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
-  try {
-    await Supabase.initialize(
-      url: 'https://bzsqhbyotxouppzwyift.supabase.co',
-      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6c3FoYnlvdHhvdXBwend5aWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA2NTg0MDgsImV4cCI6MjA4NjIzNDQwOH0.XPzxS7isEC3jIRw58XfNVvr2qrtyw8F1E68y5D0OG7o',
-    );
-    debugPrint('✅ Supabase initialized successfully');
-  } catch (e) {
-    debugPrint('❌ Supabase initialization error: $e');
-  }
-
-  runApp(const MyApp());
+  runApp(const EcoCApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class EcoCApp extends StatelessWidget {
+  const EcoCApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => AppThemeProvider()),
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => TranscriptProvider()),
-      ],
-      child: Consumer2<AppThemeProvider, AuthProvider>(
-        builder: (context, themeProvider, authProvider, _) {
-          return MaterialApp(
-            title: 'Echo See',
-            debugShowCheckedModeBanner: false,
-
-            // 🔥 VERY IMPORTANT
-            navigatorKey: NavigationService.navigatorKey,
-            initialRoute: '/', // Splash se start
-            onGenerateRoute: NavigationService.onGenerateRoute,
-
-            theme: themeProvider.themeData,
-          );
-        },
+    return ChangeNotifierProvider(
+      create: (_) => LiveTranscriptionController()..initialize(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'EcoC',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF00796B)),
+          scaffoldBackgroundColor: const Color(0xFFF2F5F7),
+          useMaterial3: true,
+        ),
+        home: const LiveTranscriptionScreen(),
       ),
     );
   }

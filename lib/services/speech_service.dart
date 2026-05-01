@@ -1,7 +1,8 @@
 // lib/services/speech_service.dart
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-// import 'package:vosk_flutter/vosk_flutter.dart';  // Temporarily disabled
+import 'package:speech_to_text/speech_to_text.dart';
+import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 enum SpeechRecognitionState {
@@ -23,10 +24,8 @@ class SpeechService {
 
   final List<String> _recognizedText = [];
 
-  // Vosk & Audio Objects (disabled temporarily)
-  // VoskFlutterPlugin? _vosk;
-  dynamic _recorder;
-  StreamSubscription? _audioSubscription;
+  // Speech to Text instance
+  final SpeechToText _speechToText = SpeechToText();
 
   Stream<String> get textStream => _textStream.stream;
   Stream<SpeechRecognitionState> get stateStream => _stateStream.stream;
@@ -38,25 +37,17 @@ class SpeechService {
     try {
       _updateState(SpeechRecognitionState.processing);
 
-      // Vosk initialization disabled temporarily due to dependency issues
-      // _vosk = VoskFlutterPlugin.instance();
+      // Initialize speech to text
+      bool available = await _speechToText.initialize(
+        onStatus: _onStatus,
+        onError: _onError,
+        debugLogging: kDebugMode,
+      );
 
-      // // Load model from assets
-      // // Note: This takes some time on first run as it unzips
-      // final modelLoader = ModelLoader();
-      // final modelPath =
-      //     await modelLoader.loadFromAssets('assets/models/en.zip');
-
-      // _model = await _vosk!.createModel(modelPath);
-
-      // _recognizer = await _vosk!.createRecognizer(
-      //   model: _model!,
-      //   sampleRate: 16000,
-      // );
-
-      // Initialize recorder if available
-      if (_recorder != null && (_recorder as dynamic).initialize != null) {
-        await (_recorder as dynamic).initialize();
+      if (!available) {
+        debugPrint("Speech recognition not available on this device");
+        _updateState(SpeechRecognitionState.error);
+        return;
       }
 
       _updateState(SpeechRecognitionState.notStarted);
@@ -66,12 +57,22 @@ class SpeechService {
     }
   }
 
+  void _onStatus(String status) {
+    debugPrint("Speech status: $status");
+    if (status == "listening") {
+      _updateState(SpeechRecognitionState.listening);
+    } else if (status == "notListening") {
+      _updateState(SpeechRecognitionState.stopped);
+    }
+  }
+
+  void _onError(SpeechRecognitionError error) {
+    debugPrint("Speech error: ${error.errorMsg}");
+    _updateState(SpeechRecognitionState.error);
+  }
+
   Future<void> startListening() async {
     if (_state == SpeechRecognitionState.listening) return;
-
-    // if (_recognizer == null) {
-    //   await initialize();
-    // }
 
     if (_state == SpeechRecognitionState.error) return;
 
@@ -87,37 +88,23 @@ class SpeechService {
     _updateState(SpeechRecognitionState.listening);
     _recognizedText.clear();
 
-    // Start Recording
-    if (_recorder != null && (_recorder as dynamic).start != null) {
-      await (_recorder as dynamic).start();
-    }
-
-    if (_recorder != null && (_recorder as dynamic).audioStream != null) {
-      _audioSubscription =
-          (_recorder as dynamic).audioStream.listen((data) async {
-        // if (_recognizer != null) {
-        //   final resultFound =
-        //       await _recognizer!.acceptWaveformBytes(Uint8List.fromList(data));
-        //   if (resultFound) {
-        //     final result = await _recognizer!.getResult();
-        //     final text = jsonDecode(result)['text'];
-        //     if (text != null && text.isNotEmpty) {
-        //       _recognizedText.add(text);
-        //       _textStream.add(text);
-        //       _confidenceStream.add(
-        //           0.95); // Vosk doesn't always provide confidence in simple result
-        //     }
-        //   } else {
-        //     final partialResult = await _recognizer!.getPartialResult();
-        //     final partialText = jsonDecode(partialResult)['partial'];
-        //     if (partialText != null && partialText.isNotEmpty) {
-        //       // We can emit partial text too if we want a "live" feel
-        //       _textStream.add(partialText);
-        //     }
-        //   }
-        // }
-      });
-    }
+    // Start listening
+    await _speechToText.listen(
+      onResult: (result) {
+        final recognizedWords = result.recognizedWords;
+        if (recognizedWords.isNotEmpty) {
+          _recognizedText.add(recognizedWords);
+          _textStream.add(recognizedWords);
+          _confidenceStream.add(result.confidence);
+        }
+      },
+      listenFor: const Duration(seconds: 30),
+      pauseFor: const Duration(seconds: 5),
+      partialResults: true,
+      localeId: 'en_US', // Default to English
+      cancelOnError: true,
+      listenMode: ListenMode.confirmation,
+    );
   }
 
   Future<void> stopListening() async {
@@ -125,26 +112,16 @@ class SpeechService {
 
     _updateState(SpeechRecognitionState.processing);
 
-    await _audioSubscription?.cancel();
-
-    if (_recorder != null && (_recorder as dynamic).stop != null) {
-      await (_recorder as dynamic).stop();
-    }
-
-    // if (_recognizer != null) {
-    //   final finalResult = await _recognizer!.getFinalResult();
-    //   final text = jsonDecode(finalResult)['text'];
-    //   if (text != null && text.isNotEmpty) {
-    //     _recognizedText.add(text);
-    //     _textStream.add(text);
-    //   }
-    // }
+    await _speechToText.stop();
 
     _updateState(SpeechRecognitionState.stopped);
   }
 
   Future<void> pauseListening() async {
-    await stopListening();
+    if (_state != SpeechRecognitionState.listening) return;
+
+    await _speechToText.stop();
+    _updateState(SpeechRecognitionState.stopped);
   }
 
   Future<void> resumeListening() async {
@@ -160,14 +137,12 @@ class SpeechService {
   }
 
   Future<List<String>> getAvailableLanguages() async {
-    return [
-      'English',
-      'Urdu', // Note: Offline Urdu requires another model
-    ];
+    final locales = await _speechToText.locales();
+    return locales.map((locale) => locale.name).toList();
   }
 
   Future<void> setLanguage(String languageCode) async {
-    // For now we only have English model bundled
+    // The language is set when calling listen, but we can store it
     debugPrint('Language set to: $languageCode');
   }
 
@@ -180,12 +155,13 @@ class SpeechService {
   }
 
   Future<List<String>> processOfflineAudio(String audioPath) async {
-    // This would involve reading a file and feeding it to the recognizer
-    return ["Offline file processing not implemented via mic stream"];
+    // speech_to_text doesn't support offline file processing
+    return ["Offline file processing not supported with speech_to_text"];
   }
 
   Future<double> getAccuracyScore() async {
-    return 0.95;
+    // Return last confidence if available
+    return 0.95; // Default confidence
   }
 
   void _updateState(SpeechRecognitionState newState) {
@@ -194,12 +170,7 @@ class SpeechService {
   }
 
   void dispose() {
-    _audioSubscription?.cancel();
-    if (_recorder != null && (_recorder as dynamic).stop != null) {
-      (_recorder as dynamic).stop();
-    }
-    // _recognizer?.dispose();
-    // _model?.dispose();
+    _speechToText.stop();
     _textStream.close();
     _stateStream.close();
     _confidenceStream.close();

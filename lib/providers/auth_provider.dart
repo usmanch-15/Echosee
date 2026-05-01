@@ -1,70 +1,30 @@
-// lib/providers/auth_provider.dart
-import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
-import 'package:echo_see_companion/core/utils/navigation_service.dart';
-import 'package:echo_see_companion/data/models/user_model.dart';
-import 'package:echo_see_companion/data/repositories/user_repository.dart';
-import 'package:echo_see_companion/data/repositories/supabase_user_repository.dart';
+import 'package:flutter/foundation.dart';
+import '../data/models/user_model.dart';
 
 class AuthProvider with ChangeNotifier {
-  final UserRepository _userRepository;
-  
-  User? _currentUser;
   bool _isLoading = false;
+  bool _isAuthenticated = false;
+  User? _currentUser;
   String? _error;
 
-  User? get currentUser => _currentUser;
   bool get isLoading => _isLoading;
+  bool get isAuthenticated => _isAuthenticated;
+  User? get currentUser => _currentUser;
   String? get error => _error;
-  bool get isAuthenticated => _currentUser != null;
   bool get isPremium => _currentUser?.isPremium ?? false;
 
-  AuthProvider() : _userRepository = SupabaseUserRepository() {
-    _initialize();
+  AuthProvider() {
+    // Initialize as not authenticated
+    _isAuthenticated = false;
+    _currentUser = null;
+    _isLoading = false;
   }
 
-  AuthProvider.test(this._userRepository);
-
-  Future<void> _initialize() async {
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      _currentUser = await _userRepository.getCurrentUser();
-    } catch (e) {
-      _error = e.toString();
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-
-    // Listen to auth state changes
-    supabase.Supabase.instance.client.auth.onAuthStateChange.listen((data) async {
-      final event = data.event;
-      if (event == supabase.AuthChangeEvent.signedIn) {
-        await refreshUser();
-      } else if (event == supabase.AuthChangeEvent.signedOut) {
-        _currentUser = null;
-        notifyListeners();
-      } else if (event == supabase.AuthChangeEvent.passwordRecovery) {
-        // Navigate to reset password screen
-        NavigationService.navigateToAndRemoveUntil('/reset-password');
-        notifyListeners();
-      }
-    });
-  }
-
-  Future<void> refreshUser() async {
-    _isLoading = true;
-    notifyListeners();
-    try {
-      _currentUser = await _userRepository.getCurrentUser();
-    } catch (e) {
-      _error = _handleError(e);
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
+  AuthProvider.test() {
+    // Test constructor
+    _isAuthenticated = false;
+    _currentUser = null;
+    _isLoading = false;
   }
 
   Future<bool> login(String email, String password) async {
@@ -73,14 +33,33 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      _currentUser = await _userRepository.login(email, password);
-      return true;
-    } catch (e) {
-      _error = _handleError(e);
-      return false;
-    } finally {
+      // Simulate login - always succeed for now
+      await Future.delayed(const Duration(seconds: 1));
+      _currentUser = User(
+        id: '1',
+        email: email,
+        name: 'Test User',
+        createdAt: DateTime.now(),
+        isPremium: true,
+        preferences: {},
+        usageStats: UsageStats(
+          totalTranscripts: 0,
+          totalMinutes: 0,
+          languagesUsed: 0,
+          lastActive: DateTime.now(),
+          languageDistribution: {},
+          dailyUsage: {},
+        ),
+      );
+      _isAuthenticated = true;
       _isLoading = false;
       notifyListeners();
+      return true;
+    } catch (e) {
+      _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
     }
   }
 
@@ -90,129 +69,190 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      _currentUser = await _userRepository.signup(name, email, password);
-      return true;
-    } catch (e) {
-      _error = _handleError(e);
-      return false;
-    } finally {
+      // Simulate signup - always succeed for now
+      await Future.delayed(const Duration(seconds: 1));
+      _currentUser = User(
+        id: 'signup_1',
+        email: email,
+        name: name,
+        createdAt: DateTime.now(),
+        isPremium: false,
+        preferences: {},
+        usageStats: UsageStats(
+          totalTranscripts: 0,
+          totalMinutes: 0,
+          languagesUsed: 0,
+          lastActive: DateTime.now(),
+          languageDistribution: {},
+          dailyUsage: {},
+        ),
+      );
+      _isAuthenticated = true;
       _isLoading = false;
       notifyListeners();
+      return true;
+    } catch (e) {
+      _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
     }
   }
 
   Future<void> logout() async {
+    _isLoading = true;
+    notifyListeners();
+
+    await Future.delayed(const Duration(milliseconds: 500));
+    _currentUser = null;
+    _isAuthenticated = false;
+    _isLoading = false;
+    _error = null;
+    notifyListeners();
+  }
+
+  Future<bool> signInWithGoogle() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
     try {
-      await _userRepository.logout();
-      _currentUser = null;
+      await Future.delayed(const Duration(seconds: 1));
+      _currentUser = User(
+        id: 'google_1',
+        email: 'user@gmail.com',
+        name: 'Google User',
+        createdAt: DateTime.now(),
+        isPremium: false,
+        preferences: {},
+        usageStats: UsageStats(
+          totalTranscripts: 0,
+          totalMinutes: 0,
+          languagesUsed: 0,
+          lastActive: DateTime.now(),
+          languageDistribution: {},
+          dailyUsage: {},
+        ),
+      );
+      _isAuthenticated = true;
+      _isLoading = false;
       notifyListeners();
+      return true;
     } catch (e) {
-      _error = _handleError(e);
+      _error = e.toString();
+      _isLoading = false;
       notifyListeners();
+      return false;
     }
   }
 
-  Future<void> resetPassword(String email) async {
+  Future<bool> signInWithFacebook() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
     try {
-      await _userRepository.resetPassword(email);
+      await Future.delayed(const Duration(seconds: 1));
+      _currentUser = User(
+        id: 'facebook_1',
+        email: 'user@facebook.com',
+        name: 'Facebook User',
+        createdAt: DateTime.now(),
+        isPremium: false,
+        preferences: {},
+        usageStats: UsageStats(
+          totalTranscripts: 0,
+          totalMinutes: 0,
+          languagesUsed: 0,
+          lastActive: DateTime.now(),
+          languageDistribution: {},
+          dailyUsage: {},
+        ),
+      );
+      _isAuthenticated = true;
+      _isLoading = false;
+      notifyListeners();
+      return true;
     } catch (e) {
-      _error = _handleError(e);
-      rethrow;
+      _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> resetPassword(String email) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      // Simulate password reset
+      await Future.delayed(const Duration(seconds: 1));
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
     }
   }
 
   Future<bool> updateProfile({required String name, String? imageUrl}) async {
     if (_currentUser == null) return false;
-    
+
     _isLoading = true;
     _error = null;
     notifyListeners();
 
     try {
-      final updatedUser = _currentUser!.copyWith(
+      // Simulate profile update
+      await Future.delayed(const Duration(seconds: 1));
+      _currentUser = User(
+        id: _currentUser!.id,
         name: name,
-        profileImage: imageUrl ?? _currentUser!.profileImage,
+        email: _currentUser!.email,
+        profileImage: imageUrl,
+        createdAt: _currentUser!.createdAt,
+        isPremium: _currentUser!.isPremium,
+        premiumExpiry: _currentUser!.premiumExpiry,
+        preferences: _currentUser!.preferences,
+        usageStats: _currentUser!.usageStats,
       );
-      await _userRepository.updateProfile(updatedUser);
-      await refreshUser();
+      _isLoading = false;
+      notifyListeners();
       return true;
     } catch (e) {
-      _error = _handleError(e);
+      _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
       return false;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
     }
   }
 
-  Future<void> togglePremium() async {
+  void togglePremium() {
     if (_currentUser == null) return;
-    
-    _isLoading = true;
-    _error = null;
-    notifyListeners();
 
-    try {
-      final newStatus = !isPremium;
-      await supabase.Supabase.instance.client
-          .from('users')
-          .update({'is_premium': newStatus})
-          .eq('id', _currentUser!.id);
-      
-      await refreshUser();
-    } catch (e) {
-      _error = _handleError(e);
-      rethrow;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
+    _currentUser = User(
+      id: _currentUser!.id,
+      name: _currentUser!.name,
+      email: _currentUser!.email,
+      profileImage: _currentUser!.profileImage,
+      createdAt: _currentUser!.createdAt,
+      isPremium: !_currentUser!.isPremium,
+      premiumExpiry: _currentUser!.isPremium
+          ? null
+          : DateTime.now().add(const Duration(days: 30)),
+      preferences: _currentUser!.preferences,
+      usageStats: _currentUser!.usageStats,
+    );
+    notifyListeners();
   }
 
-  Future<void> signInWithGoogle() async {
-    _isLoading = true;
+  void clearError() {
     _error = null;
     notifyListeners();
-
-    try {
-      await _userRepository.signInWithGoogle();
-      await refreshUser();
-    } catch (e) {
-      _error = _handleError(e);
-      notifyListeners();
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> signInWithFacebook() async {
-    _isLoading = true;
-    _error = null;
-    notifyListeners();
-
-    try {
-      await _userRepository.signInWithFacebook();
-      await refreshUser();
-    } catch (e) {
-      _error = _handleError(e);
-      notifyListeners();
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  String _handleError(dynamic e) {
-    final errorString = e.toString();
-    if (errorString.contains('SocketException') || 
-        errorString.contains('Network') || 
-        errorString.contains('failed to connect')) {
-      return 'No internet connection. Please check your network.';
-    }
-    if (errorString.contains('Invalid login credentials')) return 'Invalid email or password.';
-    if (errorString.contains('User already registered')) return 'This email is already registered.';
-    
-    return errorString;
   }
 }

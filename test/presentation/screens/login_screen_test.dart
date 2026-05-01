@@ -5,17 +5,15 @@ import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 import 'package:echo_see_companion/presentation/screens/login_screen.dart';
 import 'package:echo_see_companion/providers/auth_provider.dart';
-import 'package:echo_see_companion/data/repositories/user_repository.dart';
 
 class MockAuthProvider extends Mock implements AuthProvider {}
-class MockUserRepository extends Mock implements UserRepository {}
 
 void main() {
   late MockAuthProvider mockAuthProvider;
 
   setUp(() {
     mockAuthProvider = MockAuthProvider();
-    
+
     // Stub common properties
     when(() => mockAuthProvider.isLoading).thenReturn(false);
     when(() => mockAuthProvider.isAuthenticated).thenReturn(false);
@@ -41,9 +39,11 @@ void main() {
       expect(find.text('LOGIN'), findsOneWidget);
     });
 
-    testWidgets('Shows error message when login fails', (WidgetTester tester) async {
+    testWidgets('Shows error message when login fails',
+        (WidgetTester tester) async {
       // Arrange
-      when(() => mockAuthProvider.login(any(), any())).thenAnswer((_) async => false);
+      when(() => mockAuthProvider.login(any(), any()))
+          .thenAnswer((_) async => false);
       when(() => mockAuthProvider.error).thenReturn('Invalid credentials');
 
       await tester.pumpWidget(createWidgetUnderTest());
@@ -51,14 +51,14 @@ void main() {
       // Act
       await tester.enterText(find.byType(TextFormField).at(0), 'test@test.com');
       await tester.enterText(find.byType(TextFormField).at(1), 'password');
-      
+
       final loginButton = find.text('LOGIN');
       await tester.ensureVisible(loginButton);
       await tester.tap(loginButton);
-      
+
       await tester.pump(); // Start the login future
       await tester.pump(); // Handle the result and trigger SnackBar
-      
+
       // SnackBar needs time to animate
       await tester.pump(const Duration(milliseconds: 750));
 
@@ -67,7 +67,8 @@ void main() {
       expect(find.text('Invalid credentials'), findsOneWidget);
     });
 
-    testWidgets('Shows loading indicator when authenticating', (WidgetTester tester) async {
+    testWidgets('Shows loading indicator when authenticating',
+        (WidgetTester tester) async {
       // Arrange
       when(() => mockAuthProvider.isLoading).thenReturn(true);
 
@@ -76,13 +77,14 @@ void main() {
       // Assert
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
       // Login button should be disabled (implementation check)
-      final loginButton = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      final loginButton =
+          tester.widget<ElevatedButton>(find.byType(ElevatedButton));
       expect(loginButton.onPressed, isNull);
     });
 
     testWidgets('Can open Forgot Password dialog', (WidgetTester tester) async {
       await tester.pumpWidget(createWidgetUnderTest());
-      
+
       final forgotPasswordButton = find.text('Forgot Password?');
       await tester.tap(forgotPasswordButton);
       await tester.pumpAndSettle();
@@ -100,7 +102,6 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.byType(AlertDialog), findsNothing);
       });
-
     });
   });
 }
