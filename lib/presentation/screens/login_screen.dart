@@ -1,4 +1,4 @@
-// lib/presentation/screens/login_screen.dart
+
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -127,12 +127,15 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   ),
                 ),
                 const SizedBox(height: 40),
+                
+                // 1. Modern Input Fields
                 _buildTextField(
                   label: 'Email',
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 15), // Munasib Gap
+                
                 _buildTextField(
                   label: 'Password',
                   controller: _passwordController,
@@ -142,6 +145,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     setState(() => _isPasswordVisible = !_isPasswordVisible);
                   },
                 ),
+                
                 const SizedBox(height: 12),
                 Align(
                   alignment: Alignment.centerRight,
@@ -156,26 +160,30 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                
+                const SizedBox(height: 15), // Munasib Gap
+
+                // 2. Bold and Modern Login Button
                 Consumer<AuthProvider>(
                   builder: (context, auth, _) {
                     return SizedBox(
                       width: double.infinity,
-                      height: 48,
+                      height: 55, // Size thora bada kiya
                       child: ElevatedButton(
                         onPressed: auth.isLoading ? null : _login,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
+                          elevation: 2,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         child: auth.isLoading
                             ? const SizedBox(
-                                width: 20,
-                                height: 20,
+                                width: 24,
+                                height: 24,
                                 child: CircularProgressIndicator(
-                                  strokeWidth: 2,
+                                  strokeWidth: 2.5,
                                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                                 ),
                               )
@@ -183,14 +191,15 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                 'Login',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18, // Font size barhaya
+                                  fontWeight: FontWeight.bold, // Text Bold kiya
                                 ),
                               ),
                       ),
                     );
                   },
                 ),
+                
                 const SizedBox(height: 24),
                 Row(
                   children: [
@@ -259,30 +268,35 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     bool isPasswordVisible = false,
     VoidCallback? onToggleVisibility,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey[300]!),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: TextField(
-        controller: controller,
-        keyboardType: keyboardType,
-        obscureText: isPassword && !isPasswordVisible,
-        decoration: InputDecoration(
-          hintText: 'Enter your $label',
-          hintStyle: TextStyle(color: Colors.grey[400]),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.all(16),
-          suffixIcon: isPassword
-              ? IconButton(
-                  icon: Icon(
-                    isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                    color: Colors.grey,
-                  ),
-                  onPressed: onToggleVisibility,
-                )
-              : null,
+    // 3. Updated Decoration with OutlineInputBorder
+    return TextField(
+      controller: controller,
+      keyboardType: keyboardType,
+      obscureText: isPassword && !isPasswordVisible,
+      style: const TextStyle(fontSize: 15),
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: 'Enter your $label',
+        labelStyle: TextStyle(color: Colors.grey[700]),
+        hintStyle: TextStyle(color: Colors.grey[400]),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey[300]!, width: 1.5),
         ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+        ),
+        suffixIcon: isPassword
+            ? IconButton(
+                icon: Icon(
+                  isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.grey,
+                ),
+                onPressed: onToggleVisibility,
+              )
+            : null,
       ),
     );
   }
@@ -293,7 +307,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       height: 50,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey[300]!),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12), 
       ),
       child: IconButton(
         icon: Icon(icon, color: AppColors.primary),
