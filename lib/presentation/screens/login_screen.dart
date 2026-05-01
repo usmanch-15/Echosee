@@ -1,10 +1,8 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:echosee/core/constants/app_colors.dart';
 import 'package:echosee/presentation/screens/signup_screen.dart';
-import 'package:echosee/presentation/screens/main_screen.dart';
+import 'package:echosee/presentation/screens/bluetooth_screen.dart'; // Bluetooth import add kiya
 import 'package:echosee/providers/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -25,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
+    // Default values for testing
     _emailController.text = 'usman@gmail.com';
     _passwordController.text = '123456';
 
@@ -49,6 +48,14 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   }
 
   Future<void> _login() async {
+    // Basic validation check
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter both email and password')),
+      );
+      return;
+    }
+
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final success = await authProvider.login(
       _emailController.text,
@@ -56,9 +63,10 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     );
 
     if (success && mounted) {
+      // Login ke baad Bluetooth Screen par redirect karna
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainScreen()),
+        MaterialPageRoute(builder: (context) => const BluetoothScreen()),
       );
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -128,13 +136,12 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                 ),
                 const SizedBox(height: 40),
                 
-                // 1. Modern Input Fields
                 _buildTextField(
                   label: 'Email',
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                 ),
-                const SizedBox(height: 15), // Munasib Gap
+                const SizedBox(height: 15),
                 
                 _buildTextField(
                   label: 'Password',
@@ -161,14 +168,13 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   ),
                 ),
                 
-                const SizedBox(height: 15), // Munasib Gap
+                const SizedBox(height: 15),
 
-                // 2. Bold and Modern Login Button
                 Consumer<AuthProvider>(
                   builder: (context, auth, _) {
                     return SizedBox(
                       width: double.infinity,
-                      height: 55, // Size thora bada kiya
+                      height: 55,
                       child: ElevatedButton(
                         onPressed: auth.isLoading ? null : _login,
                         style: ElevatedButton.styleFrom(
@@ -191,8 +197,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                 'Login',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 18, // Font size barhaya
-                                  fontWeight: FontWeight.bold, // Text Bold kiya
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                       ),
@@ -268,7 +274,6 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     bool isPasswordVisible = false,
     VoidCallback? onToggleVisibility,
   }) {
-    // 3. Updated Decoration with OutlineInputBorder
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
