@@ -10,6 +10,7 @@ import 'package:echosee/providers/transcript_provider.dart';
 import 'package:echosee/providers/app_theme_provider.dart';
 import 'package:echosee/data/models/transcript_model.dart';
 import 'package:echosee/services/speech_service.dart';
+import 'package:echosee/services/yamnet_service.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -24,16 +25,21 @@ class _MainScreenState extends State<MainScreen> {
   bool autoRecord = true;
   DateTime? _recordingStartTime;
   String _liveText = '';
+  String _detectedSound = '';
   Timer? _liveTimer;
   StreamSubscription<String>? _liveSub;
+  StreamSubscription<Map<String, double>>? _soundSub;
+  final YamNetService _yamNetService = YamNetService();
 
   @override
   void dispose() {
     _liveSub?.cancel();
+    _soundSub?.cancel();
     _liveTimer?.cancel();
+    _yamNetService.dispose();
     super.dispose();
   }
-  
+
   @override
   void initState() {
     super.initState();
@@ -41,6 +47,7 @@ class _MainScreenState extends State<MainScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<TranscriptProvider>(context, listen: false).loadTranscripts();
       speechService.initialize();
+      _yamNetService.init();
     });
 
     _liveSub = speechService.textStream.listen((text) {
@@ -50,6 +57,46 @@ class _MainScreenState extends State<MainScreen> {
         });
       }
     });
+
+    _soundSub = _yamNetService.soundStream.listen((results) {
+      if (isRecording) {
+        // Find the sound with the highest confidence > 0.3
+        String topSound = '';
+        double maxConfidence = 0.3; // Threshold
+
+        results.forEach((key, value) {
+          // ignore Speech, since it's handled by transcript
+          if (key != 'Speech' && value > maxConfidence) {
+            maxConfidence = value;
+            topSound = key;
+          }
+        });
+
+        if (topSound.isNotEmpty && _detectedSound != topSound) {
+          setState(() {
+            _detectedSound = topSound;
+          });
+          _showSoundAlert(topSound);
+        }
+      }
+    });
+  }
+
+  void _showSoundAlert(String sound) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.warning_amber_rounded, color: Colors.white),
+            const SizedBox(width: 10),
+            Text('Sound detected: $sound!'),
+          ],
+        ),
+        backgroundColor: Colors.orange[800],
+        duration: const Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   @override
@@ -143,6 +190,32 @@ class _MainScreenState extends State<MainScreen> {
           ],
 
           if (!isRecording) const SizedBox(height: 8),
+
+          // Detected Sound Banner
+          if (isRecording && _detectedSound.isNotEmpty)
+            Container(
+              margin: const EdgeInsets.only(top: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.orange.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.orange, width: 1.5),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.notifications_active, color: Colors.orange),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Listening: $_detectedSound',
+                    style: TextStyle(
+                      fontSize: themeProvider.fontSize,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange[800],
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
           // Urdu Text (if language is Urdu)
           if (selectedLanguage == 'اردو' && !isRecording)
@@ -492,18 +565,22 @@ class _MainScreenState extends State<MainScreen> {
       isRecording = true;
       _recordingStartTime = DateTime.now();
       _liveText = '';
+      _detectedSound = '';
     });
-    
+
     speechService.startListening();
+    _yamNetService.startListening();
   }
 
   void _stopRecording() async {
     final duration = DateTime.now().difference(_recordingStartTime ?? DateTime.now());
-    
+
     await speechService.stopListening();
-    
+    await _yamNetService.stopListening();
+
     setState(() {
       isRecording = false;
+      _detectedSound = '';
     });
 
     // Mock transcript content creation

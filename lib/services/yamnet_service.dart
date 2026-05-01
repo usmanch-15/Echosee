@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'package:flutter/services.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:sound_stream/sound_stream.dart';
 
@@ -7,22 +8,45 @@ class YamNetService {
   late Interpreter _interpreter;
   final _recorder = RecorderStream();
   final _controller = StreamController<Map<String, double>>.broadcast();
-  
+  late List<String> _classLabels;
+
   bool _isInitialized = false;
   bool _isListening = false;
-  
+
   Stream<Map<String, double>> get soundStream => _controller.stream;
 
   Future<void> init() async {
     try {
-      // For actual implementation, download yamnet.tflite and its labels.
-      // https://tfhub.dev/google/lite-model/yamnet/1/default/1
       _interpreter = await Interpreter.fromAsset('assets/models/yamnet.tflite');
+      await _loadClassLabels();
       _isInitialized = true;
-      print("YamNet Initialized");
+      print("YamNet Initialized with ${_classLabels.length} labels");
     } catch (e) {
       print("Error initializing YamNet: $e");
-      // Fallback or mock for demo/tests
+    }
+  }
+
+  Future<void> _loadClassLabels() async {
+    try {
+      final csvContent = await rootBundle.loadString('assets/models/yamnet_class_map.csv');
+      final lines = csvContent.split('\n');
+      _classLabels = [];
+
+      for (var line in lines) {
+        if (line.trim().isEmpty) continue;
+        // CSV format: "index","display_name"
+        // e.g., "0","Speech"
+        final parts = line.split('"');
+        if (parts.length >= 4) {
+          final label = parts[3];
+          _classLabels.add(label);
+        }
+      }
+      print("Loaded ${_classLabels.length} class labels");
+    } catch (e) {
+      print("Error loading class labels: $e");
+      // Fallback to empty list
+      _classLabels = [];
     }
   }
 
@@ -70,14 +94,32 @@ class YamNetService {
   }
 
   Map<String, double> _getTopResults(List<dynamic> output) {
-    // Simplified mapping for common safety sounds
-    // In production, use the actual YAMNet labels file
-    return {
-      'Speech': output[0] as double,
-      'Siren': output[3] as double,
-      'Dog': output[10] as double,
-      'Alarm': output[25] as double,
-    };
+    if (_classLabels.isEmpty) {
+      // Fallback if labels didn't load
+      return {
+        'Speech': output[0] as double,
+        'Siren': (output.length > 3 ? output[3] : 0.0) as double,
+        'Dog': (output.length > 10 ? output[10] : 0.0) as double,
+        'Alarm': (output.length > 25 ? output[25] : 0.0) as double,
+      };
+    }
+
+    final results = <String, double>{};
+
+    // Get top 5 predictions with confidence > 0.3
+    for (int i = 0; i < output.length && i < _classLabels.length; i++) {
+      final confidence = output[i] as double;
+      if (confidence > 0.3) {
+        results[_classLabels[i]] = confidence;
+      }
+    }
+
+    // If no confident predictions, return empty
+    if (results.isEmpty) {
+      return {};
+    }
+
+    return results;
   }
 
   void dispose() {
