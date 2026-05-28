@@ -51,6 +51,7 @@
 
 ## 🛠 Tech Stack
 
+
 **Frontend**
 - [Flutter](https://flutter.dev) `>=3.0.0` — Cross-platform UI framework
 - [Provider](https://pub.dev/packages/provider) — State management
